@@ -1,4 +1,4 @@
-#Sat Dec 09 15:57:57 CST 2017
-base.0=E\:\\GFLottery\\GFLottery\\android\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main
+#Wed Dec 13 16:45:10 CST 2017
+base.0=E\:\\lottery\\GFLottery\\android\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main
 renamed.0=classes.dex
-file.0=E\:\\GFLottery\\GFLottery\\android\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main\\classes.dex
+file.0=E\:\\lottery\\GFLottery\\android\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main\\classes.dex
