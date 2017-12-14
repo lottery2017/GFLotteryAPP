@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+    ImageBackground
 } from 'react-native';
 import * as helper from './helper';
 import BaseComponent from '../Views/BaseComponent';
@@ -63,14 +64,14 @@ export default class QLCCell extends BaseComponent {
                 const key = `${number} ${index}`;
                 if (index <= 6) {
                   return (
-                    <Image key={key} style={styles.ball} source={require('../../../images/redBall.png')}>
+                    <ImageBackground key={key} style={styles.ball} source={require('../../../images/redBall.png')}>
                       <Text style={styles.text}>{number}</Text>
-                    </Image>);
+                    </ImageBackground>);
                 }
                 return (
-                  <Image key={key} style={styles.ball} source={require('../../../images/blueBall.png')}>
+                  <ImageBackground key={key} style={styles.ball} source={require('../../../images/blueBall.png')}>
                     <Text style={styles.text}>{number}</Text>
-                  </Image>
+                  </ImageBackground>
                 );
               })}
             </View>

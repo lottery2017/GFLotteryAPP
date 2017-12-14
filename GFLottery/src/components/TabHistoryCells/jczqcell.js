@@ -7,6 +7,7 @@ import {
   Dimensions,
   NativeModules,
   TouchableOpacity,
+    ImageBackground
 } from 'react-native';
 import PropTypes from 'prop-types';
 import BaseComponent from '../Views/BaseComponent';
@@ -48,13 +49,13 @@ export default class JCZQCell extends BaseComponent {
               <Text style={{ marginLeft: 5, fontSize: 12, color: '#aaaaaa' }}>{`主队vs客队 ${this.props.matchItem.matchDay}`}</Text>
             </View>
             <View style={{ marginLeft: 15, marginRight: 30, marginBottom: 10, flexDirection: 'row', alignItems: 'center' }}>
-              <Image resizeMode="stretch" style={{ width: SCREEN_WIDTH * 0.86, height: 87 * X_SCALE * 0.425, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} source={require('../../../images/HistoryFootBallBack.png')}>
+              <ImageBackground resizeMode="stretch" style={{ width: SCREEN_WIDTH * 0.86, height: 87 * X_SCALE * 0.425, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} source={require('../../../images/HistoryFootBallBack.png')}>
                 <Text style={[styles.text]}>{this.props.matchItem.teamA}</Text>
                 {this.renderConcedeBall()}
                 <Text style={[styles.text, { marginRight: 15, marginLeft: 15 }]}>{this.props
                   .matchItem.scoreA}:{this.props.matchItem.scoreB}</Text>
                 <Text style={[styles.text]}>{this.props.matchItem.teamB}</Text>
-              </Image>
+              </ImageBackground>
             </View>
           </View>
           <Image style={{ marginRight: 15 }} source={require('../../../images/historyCellArrow.png')} />
@@ -68,9 +69,9 @@ export default class JCZQCell extends BaseComponent {
             <Text style={{ marginLeft: 15, fontSize: 16 }}>竞彩足球</Text>
           </View>
           <View style={{ marginLeft: 15, marginRight: 30, marginBottom: 10, flexDirection: 'row', alignItems: 'center' }}>
-            <Image resizeMode="stretch" style={{ width: SCREEN_WIDTH * 0.86, height: 87 * X_SCALE * 0.425, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} source={require('../../../images/HistoryFootBallBack.png')}>
+            <ImageBackground resizeMode="stretch" style={{ width: SCREEN_WIDTH * 0.86, height: 87 * X_SCALE * 0.425, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} source={require('../../../images/HistoryFootBallBack.png')}>
               <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white', backgroundColor: '#ffffff00' }}>暂无开奖信息</Text>
-            </Image>
+            </ImageBackground>
           </View>
         </View>
       </View>

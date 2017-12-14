@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   NativeModules,
   Dimensions,
+    ImageBackground
 } from 'react-native';
 import * as GlobalHelper from '../../utils/GlobalHelper';
 import * as helper from './helper';
@@ -84,9 +85,9 @@ export default class SSCCell extends BaseComponent {
                 {awardNoArr.map((number, index) => {
                   const key = `${number} ${index}`;
                   return (
-                    <Image key={key} style={styles.ball} source={require('../../../images/redBall.png')}>
+                    <ImageBackground key={key} style={styles.ball} source={require('../../../images/redBall.png')}>
                       <Text style={styles.text}>{number}</Text>
-                    </Image>);
+                    </ImageBackground>);
                 })}
                 <Text style={{ marginLeft: 10 }}>{getAwardDescription(this.props.awardNo)}</Text>
               </View>

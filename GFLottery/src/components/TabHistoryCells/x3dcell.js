@@ -7,6 +7,7 @@ import {
   NativeModules,
   TouchableOpacity,
   Dimensions,
+    ImageBackground
 } from 'react-native';
 import * as helper from './helper';
 import BaseComponent from '../Views/BaseComponent';
@@ -72,9 +73,9 @@ export default class X3DCell extends BaseComponent {
                 {awardNoArr.map((number, index) => {
                   const key = `${number} ${index}`;
                   return (
-                    <Image key={key} style={styles.ball} source={require('../../../images/redBall.png')}>
+                    <ImageBackground key={key} style={styles.ball} source={require('../../../images/redBall.png')}>
                       <Text style={styles.text}>{number}</Text>
-                    </Image>
+                    </ImageBackground>
                   );
                 })
                 }
@@ -116,9 +117,9 @@ export default class X3DCell extends BaseComponent {
                 {awardNoArr.map((number, index) => {
                   const key = `${number} ${index}`;
                   return (
-                    <Image key={key} style={styles.ball} source={numBGImage}>
+                    <ImageBackground key={key} style={styles.ball} source={numBGImage}>
                       <Text style={textStyle}>{number}</Text>
-                    </Image>
+                    </ImageBackground>
                   );
                 })
                 }

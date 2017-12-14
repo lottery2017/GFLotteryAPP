@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+    ImageBackground
 } from 'react-native';
 import * as helper from './helper';
 import BaseComponent from '../Views/BaseComponent';
@@ -59,9 +60,9 @@ export default class PL3Cell extends BaseComponent {
               {this.state.awardNoArray.map((number, index) => {
                 const key = `${number} ${index}`;
                 return (
-                  <Image style={styles.ball} source={require('../../../images/redBall.png')}>
+                  <ImageBackground style={styles.ball} source={require('../../../images/redBall.png')}>
                     <Text key={key} style={styles.text}>{number}</Text>
-                  </Image>
+                  </ImageBackground>
                 );
               })}
             </View>

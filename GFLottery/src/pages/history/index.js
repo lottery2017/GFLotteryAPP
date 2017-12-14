@@ -301,7 +301,6 @@ class TabHistoryHall extends BaseComponent {
                     onRefresh={this.onRefresh}
                     isRefreshing={this.props.isRefreshing}
                 >
-                    <Text>{JSON.stringify(this.props.gameEnArray)}</Text>
                     {this.renderNotice()}
                     {this.renderContent()}
                 </LDCPHistoryScrollView>
@@ -313,15 +312,15 @@ class TabHistoryHall extends BaseComponent {
 // 选择store中的state注入props
 function mapStateToProps(store) {
     //const store = Immutable.toJS();
-    var tabHistoryHallReducer=store.tabHistoryHallReducer.toJS();
+    var tabHistoryHallReducer = store.tabHistoryHallReducer.toJS();
 
     console.log(JSON.stringify(tabHistoryHallReducer.isRefreshing));
     return {
-        isRefreshing: store.tabHistoryHallReducer.isRefreshing,
-        awardInfo: store.tabHistoryHallReducer.awardInfo,
-        awardInfoNew: store.tabHistoryHallReducer.awardInfoNew,
-        gameEnArray: store.tabHistoryHallReducer.gameEnArray,
-        awardRankArray: store.tabHistoryHallReducer.awardRankArray,
+        isRefreshing: tabHistoryHallReducer.isRefreshing,
+        awardInfo: tabHistoryHallReducer.awardInfo,
+        awardInfoNew: tabHistoryHallReducer.awardInfoNew,
+        gameEnArray: tabHistoryHallReducer.gameEnArray,
+        awardRankArray: tabHistoryHallReducer.awardRankArray,
     };
 }
 

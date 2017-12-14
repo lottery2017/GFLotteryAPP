@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   NativeModules,
   Dimensions,
+    ImageBackground
 } from 'react-native';
 import * as helper from './helper';
 import BaseComponent from '../Views/BaseComponent';
@@ -71,9 +72,9 @@ export default class SFCCell extends BaseComponent {
                 {awardNoArr.map((number, index) => {
                   const key = `${number} ${index}`;
                   return (
-                    <Image key={key} style={styles.block} source={require('../../../images/HistorySFC.png')}>
+                    <ImageBackground key={key} style={styles.block} source={require('../../../images/HistorySFC.png')}>
                       <Text style={styles.text}>{number}</Text>
-                    </Image>
+                    </ImageBackground>
                   );
                 })
                 }
@@ -114,9 +115,9 @@ export default class SFCCell extends BaseComponent {
                 {awardNoArray.map((number, index) => {
                   const key = `${number} ${index}`;
                   return (
-                    <Image key={key} style={styles.block} source={numBGImage}>
+                    <ImageBackground key={key} style={styles.block} source={numBGImage}>
                       <Text style={textStyle}>{number}</Text>
-                    </Image>
+                    </ImageBackground>
                   );
                 })
                 }

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
+    ImageBackground
 } from 'react-native';
 import * as GlobalHelper from '../../utils/GlobalHelper';
 import * as helper from './helper';
@@ -85,11 +86,11 @@ export default class KUAI3Cell extends BaseComponent {
                 <Text style={{ marginLeft: 5, fontSize: 12, color: '#aaaaaa' }}>{getPeriodString(this.props.awardTime, this.props.periodName)}</Text>
               </View>
               <View style={{ marginLeft: 15, marginBottom: 10 * X_SCALE, flexDirection: 'row', alignItems: 'center' }}>
-                <Image style={{ width: 126, height: 35, padding: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} source={require('../../../images/HistoryK3Bg.png')}>
+                <ImageBackground style={{ width: 126, height: 35, padding: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} source={require('../../../images/HistoryK3Bg.png')}>
                   {getDice(awardNoArr[0])}
                   {getDice(awardNoArr[1])}
                   {getDice(awardNoArr[2])}
-                </Image>
+                </ImageBackground>
                 <Text style={{ marginLeft: 10 }}>{getAwardDescription(awardNoArr)}</Text>
               </View>
             </View>
@@ -125,11 +126,11 @@ export default class KUAI3Cell extends BaseComponent {
                   <Text style={{ marginLeft: 5, fontSize: 12, color: '#aaaaaa' }}>{getPeriodString(this.props.rowData.awardTime, this.props.rowData.periodName)}</Text>
                 </View>
                 <View style={{ marginLeft: 15, marginBottom: 10, flexDirection: 'row', alignItems: 'center' }}>
-                  <Image style={{ width: 126, height: 35, padding: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} source={require('../../../images/HistoryK3Bg.png')}>
+                  <ImageBackground style={{ width: 126, height: 35, padding: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} source={require('../../../images/HistoryK3Bg.png')}>
                     {getDice(awardNoArr[0])}
                     {getDice(awardNoArr[1])}
                     {getDice(awardNoArr[2])}
-                  </Image>
+                  </ImageBackground>
                   <Text style={{ marginLeft: 10 }}>{getAwardDescription(awardNoArr)}</Text>
                 </View>
               </View>

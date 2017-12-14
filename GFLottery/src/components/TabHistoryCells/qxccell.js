@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+    ImageBackground
 } from 'react-native';
 import * as helper from './helper';
 import BaseComponent from '../Views/BaseComponent';
@@ -53,9 +54,9 @@ export default class QXCCell extends BaseComponent {
               {this.state.awardNoArray.map((number, index) => {
                 const key = `${number} ${index}`;
                 return (
-                  <Image key={key} style={styles.ball} source={require('../../../images/redBall.png')}>
+                  <ImageBackground key={key} style={styles.ball} source={require('../../../images/redBall.png')}>
                     <Text style={styles.text}>{number}</Text>
-                  </Image>
+                  </ImageBackground>
                 );
               })}
             </View>

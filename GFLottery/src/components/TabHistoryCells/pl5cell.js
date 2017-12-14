@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+    ImageBackground
 } from 'react-native';
 import * as helper from './helper';
 import BaseComponent from '../Views/BaseComponent';
@@ -56,21 +57,21 @@ export default class PL5Cell extends BaseComponent {
               <Text style={{ marginLeft: 5, fontSize: 12, color: '#aaaaaa' }}>{this.state.periodSting}</Text>
             </View>
             <View style={{ marginLeft: 15, marginBottom: 10 * X_SCALE, flexDirection: 'row' }}>
-              <Image style={styles.ball} source={require('../../../images/redBall.png')}>
+              <ImageBackground style={styles.ball} source={require('../../../images/redBall.png')}>
                 <Text style={styles.text}>{this.state.awardNoArray[0]}</Text>
-              </Image>
-              <Image style={styles.ball} source={require('../../../images/redBall.png')}>
+              </ImageBackground>
+              <ImageBackground style={styles.ball} source={require('../../../images/redBall.png')}>
                 <Text style={styles.text}>{this.state.awardNoArray[1]}</Text>
-              </Image>
-              <Image style={styles.ball} source={require('../../../images/redBall.png')}>
+              </ImageBackground>
+              <ImageBackground style={styles.ball} source={require('../../../images/redBall.png')}>
                 <Text style={styles.text}>{this.state.awardNoArray[2]}</Text>
-              </Image>
-              <Image style={styles.ball} source={require('../../../images/redBall.png')}>
+              </ImageBackground>
+              <ImageBackground style={styles.ball} source={require('../../../images/redBall.png')}>
                 <Text style={styles.text}>{this.state.awardNoArray[3]}</Text>
-              </Image>
-              <Image style={styles.ball} source={require('../../../images/redBall.png')}>
+              </ImageBackground>
+              <ImageBackground style={styles.ball} source={require('../../../images/redBall.png')}>
                 <Text style={styles.text}>{this.state.awardNoArray[4]}</Text>
-              </Image>
+              </ImageBackground>
             </View>
           </View>
           <Image style={{ marginRight: 15 }} source={require('../../../images/historyCellArrow.png')} />
