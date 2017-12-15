@@ -1,5 +1,5 @@
 import React from "react";
-import {View, Text} from "react-native";
+import {View, Text, FlatList} from "react-native";
 import {connect} from "react-redux";
 import SSQCell from "../../components/TabHistoryCells/ssqcell";
 import DLTCell from "../../components/TabHistoryCells/dltcell";
@@ -61,7 +61,7 @@ class TabHistoryHall extends BaseComponent {
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.isRefreshing) {
-            this.scrollView.endRefresh();
+            //this.scrollView.endRefresh();
         }
     }
 
@@ -95,23 +95,20 @@ class TabHistoryHall extends BaseComponent {
     renderContent() {
         if (this.props.gameEnArray && this.props.gameEnArray.length > 0) {
             return (
-                <View>
-                    {this.props.gameEnArray.map((gameEn, index) => {
-                        if (index < this.props.gameEnArray.length - 1) {
-                            return (<View key={gameEn}
-                                          style={{backgroundColor: 'white'}}>{this.renderCell(gameEn, index)}<View
-                                style={{marginLeft: 15, height: 1, backgroundColor: '#ECECEC'}}/></View>);
-                        }
-
-                        return this.renderCell(gameEn, index);
-                    })}
-                </View>
-            );
+                <FlatList
+                    data={this.props.gameEnArray}
+                    keyExtractor={this._keyExtractor}
+                    onRefresh={this.onRefresh}
+                    refreshing={this.props.isRefreshing}
+                    renderItem={this.renderItem.bind(this)}/>)
         }
         return null;
     }
 
-    renderCell(gameEn, index) {
+    _keyExtractor = (item, index) => item.index;
+
+    renderItem({item, index}) {
+        let gameEn = item;
         if (gameEn === 'ssq') {
             return (
                 <SSQCell
@@ -292,18 +289,8 @@ class TabHistoryHall extends BaseComponent {
         return (
             <View style={{flex: 1}}>
                 <CommonNaviBar middleTitle="开奖信息" leftHidden rightView={<HistoryawardsPushSettingsView />}/>
-                <LDCPHistoryScrollView
-                    ref={(ref) => {
-                        this.scrollView = ref;
-                    }}
-                    automaticallyAdjustContentInsets={false}
-                    horizontal={false}
-                    onRefresh={this.onRefresh}
-                    isRefreshing={this.props.isRefreshing}
-                >
-                    {this.renderNotice()}
-                    {this.renderContent()}
-                </LDCPHistoryScrollView>
+                {this.renderNotice()}
+                {this.renderContent()}
             </View>
         );
     }

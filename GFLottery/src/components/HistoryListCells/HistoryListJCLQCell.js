@@ -368,7 +368,7 @@ export default class HistoryListJCLQCell extends BaseComponent {
                     </View>
                     <View style={styles.spSfcView}>
                         {
-                            this.isCancle()? null :
+                            this.isCancle() ? null :
                                 <Text style={styles.spSfcText}>
                                     {this.props.rowData.spSfc}
                                 </Text>
