@@ -1,159 +1,164 @@
 /**
  * 大乐透彩种二级页面
  */
-import React, { PropTypes } from 'react';
-import { View, ListView, NativeModules, NativeEventEmitter } from 'react-native';
-import { connect } from 'react-redux';
+import React from 'react';
+import PropTypes from 'prop-types';
+import {View, ListView, NativeModules, NativeEventEmitter} from 'react-native';
+import {connect} from 'react-redux';
 import X3DCell from '../../../components/TabHistoryCells/x3dcell';
 import * as X3DListActions from '../../../actions/history/x3d';
 import HistoryListHeader from '../../../components/HistoryListHeader/HistoryListHeader';
 import LotteryToolBar from '../../../components/Views/LotteryToolBar';
 import CommonNaviBar from '../../../components/Views/CommonNaviBar';
-import { LoadMoreStatus } from '../../../components/Views/LDRLScroll/LDLoadMoreRefresh';
+import {LoadMoreStatus} from '../../../components/Views/LDRLScroll/LDLoadMoreRefresh';
 import LDCPHistoryListView from '../../../components/Views/LDCPHistoryListView';
 import BaseComponent from '../../../components/Views/BaseComponent';
 import * as helper from '../../../utils/GlobalHelper';
 
 class X3DHistoryList extends BaseComponent {
-  static propTypes = {
-    gameEn: PropTypes.string.isRequired,
-    isRefreshing: PropTypes.bool,
-    historyItems: PropTypes.array,
-    hasNextPage: PropTypes.bool,
-    headerLabelString: PropTypes.string,
-    isEmpty: PropTypes.bool,
-    refreshAction: PropTypes.func.isRequired,
-    getLatestTwentyAwards: PropTypes.func.isRequired,
-    getHeaderLabelString: PropTypes.func.isRequired,
-    clearData: PropTypes.func.isRequired,
-    getNextPageAwards: PropTypes.func.isRequired,
-  };
+    static propTypes = {
+        gameEn: PropTypes.string,
+        isRefreshing: PropTypes.bool,
+        historyItems: PropTypes.array,
+        hasNextPage: PropTypes.bool,
+        headerLabelString: PropTypes.string,
+        isEmpty: PropTypes.bool,
+        refreshAction: PropTypes.func.isRequired,
+        getLatestTwentyAwards: PropTypes.func.isRequired,
+        getHeaderLabelString: PropTypes.func.isRequired,
+        clearData: PropTypes.func.isRequired,
+        getNextPageAwards: PropTypes.func.isRequired,
+    };
 
-  static defaultProps = {
-    isRefreshing: false,
-    historyItems: [],
-    hasNextPage: false,
-    headerLabelString: '',
-    isEmpty: true,
-  }
+    static defaultProps = {
+        isRefreshing: false,
+        historyItems: [],
+        hasNextPage: false,
+        headerLabelString: '',
+        isEmpty: true,
+    };
 
-  constructor(props) {
-    super(props);
-    this.functionBindThis();
-  }
-
-  componentDidMount() {
-    this.myModuleEvt = new NativeEventEmitter(NativeModules.LDRNEventEmitter).addListener('LDRN_SET_AWARD_PUSH', () => {
-      this.props.getHeaderLabelString(this.props.gameEn);
-    },
-    );
-    this.props.refreshAction();
-    this.props.getLatestTwentyAwards(this.props.gameEn);
-    this.props.getHeaderLabelString(this.props.gameEn);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.isRefreshing) {
-      this.listView.endRefresh();
+    constructor(props) {
+        super(props);
+        this.functionBindThis();
+        this.state = ({
+            gameEn: this.props.navigation.state.params.gameEn
+        })
     }
-    if (nextProps.historyItems.length > 0) {
-      this.listView.setLoadMoreStatus(LoadMoreStatus.idle);
+
+    componentDidMount() {
+        this.myModuleEvt = new NativeEventEmitter(NativeModules.LDRNEventEmitter).addListener('LDRN_SET_AWARD_PUSH', () => {
+                this.props.getHeaderLabelString(this.state.gameEn);
+            },
+        );
+        this.props.refreshAction();
+        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getHeaderLabelString(this.state.gameEn);
     }
-  }
 
-  componentWillUnmount() {
-    this.props.clearData();
-    if (this.myModuleEvt) {
-      this.myModuleEvt.remove();
+    componentWillReceiveProps(nextProps) {
+        if (!nextProps.isRefreshing) {
+            this.listView.endRefresh();
+        }
+        if (nextProps.historyItems.length > 0) {
+            this.listView.setLoadMoreStatus(LoadMoreStatus.idle);
+        }
     }
-  }
 
-  // 下拉刷新
-  onRefresh() {
-    this.props.getLatestTwentyAwards(this.props.gameEn);
-  }
-
-  // 上拉加载更多
-  onEndReached() {
-    if (this.props.hasNextPage && this.props.historyItems && this.props.historyItems.length !== 0) {
-      this.props.getNextPageAwards(
-        this.props.gameEn, this.props.historyItems[this.props.historyItems.length - 1].periodName,
-      );
+    componentWillUnmount() {
+        this.props.clearData();
+        if (this.myModuleEvt) {
+            this.myModuleEvt.remove();
+        }
     }
-  }
 
-  functionBindThis() {
-    this.renderHeader = this.renderHeader.bind(this);
-    this.onRefresh = this.onRefresh.bind(this);
-    this.renderRow = this.renderRow.bind(this);
-    this.onEndReached = this.onEndReached.bind(this);
-  }
+    // 下拉刷新
+    onRefresh() {
+        this.props.getLatestTwentyAwards(this.state.gameEn);
+    }
 
-  renderRow(rowData, sectionID, rowID) {
-    return (
-      <X3DCell
-        gameEn={this.props.gameEn}
-        rowData={rowData}
-        row={rowID}
-        cellStyle="historyList"
-      />
-    );
-  }
+    // 上拉加载更多
+    onEndReached() {
+        if (this.props.hasNextPage && this.props.historyItems && this.props.historyItems.length !== 0) {
+            this.props.getNextPageAwards(
+                this.state.gameEn, this.props.historyItems[this.props.historyItems.length - 1].periodName,
+            );
+        }
+    }
 
-  renderHeader() {
-    return (
-      <HistoryListHeader headerLabelString={this.props.headerLabelString} />
-    );
-  }
+    functionBindThis() {
+        this.renderHeader = this.renderHeader.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
+        this.renderRow = this.renderRow.bind(this);
+        this.onEndReached = this.onEndReached.bind(this);
+    }
 
-  render() {
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    const { historyItems } = this.props;
-    return (
-      <View style={{ flex: 1 }}>
-        <CommonNaviBar middleTitle={helper.getCNNameFor(this.props.gameEn)} />
-        <LDCPHistoryListView
-          ref={(ref) => { this.listView = ref; }}
-          renderRow={this.renderRow}
-          dataSource={ds.cloneWithRows(historyItems)}
-          automaticallyAdjustContentInsets={false}
-          horizontal={false}
-          onRefresh={this.onRefresh}
-          onLoadMore={this.onEndReached}
-          enableEmptySections
-          isShowLoadMore={this.props.hasNextPage}
-          renderHeader={this.renderHeader}
-          empty={this.props.isEmpty}
-          isRefreshing={this.props.isRefreshing}
-        />
-        <LotteryToolBar gameEn={this.props.gameEn} />
-      </View>
-    );
-  }
+    renderRow(rowData, sectionID, rowID) {
+        return (
+            <X3DCell
+                gameEn={this.state.gameEn}
+                rowData={rowData}
+                row={rowID}
+                cellStyle="historyList"
+            />
+        );
+    }
+
+    renderHeader() {
+        return (
+            <HistoryListHeader headerLabelString={this.props.headerLabelString}/>
+        );
+    }
+
+    render() {
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        const {historyItems} = this.props;
+        return (
+            <View style={{flex: 1}}>
+                <CommonNaviBar middleTitle={helper.getCNNameFor(this.state.gameEn)}/>
+                <LDCPHistoryListView
+                    ref={(ref) => {
+                        this.listView = ref;
+                    }}
+                    renderRow={this.renderRow}
+                    dataSource={ds.cloneWithRows(historyItems)}
+                    automaticallyAdjustContentInsets={false}
+                    horizontal={false}
+                    onRefresh={this.onRefresh}
+                    onLoadMore={this.onEndReached}
+                    enableEmptySections
+                    isShowLoadMore={this.props.hasNextPage}
+                    renderHeader={this.renderHeader}
+                    empty={this.props.isEmpty}
+                    isRefreshing={this.props.isRefreshing}
+                />
+                <LotteryToolBar gameEn={this.state.gameEn}/>
+            </View>
+        );
+    }
 }
 
 // 选择store中的state注入props
-function mapStateToProps(storeImmutualble) {
-  const store = storeImmutualble.toJS();
-  return {
-    isRefreshing: store.X3DHistoryListReducer.isRefreshing,
-    historyItems: store.X3DHistoryListReducer.historyItems,
-    headerLabelString: store.X3DHistoryListReducer.headerLabelString,
-    hasNextPage: store.X3DHistoryListReducer.hasNextPage,
-    isEmpty: store.X3DHistoryListReducer.isEmpty,
-  };
+function mapStateToProps(store) {
+    const X3DHistoryListReducer = store.X3DHistoryListReducer.toJS();
+    return {
+        isRefreshing: X3DHistoryListReducer.isRefreshing,
+        historyItems: X3DHistoryListReducer.historyItems,
+        headerLabelString: X3DHistoryListReducer.headerLabelString,
+        hasNextPage: X3DHistoryListReducer.hasNextPage,
+        isEmpty: X3DHistoryListReducer.isEmpty,
+    };
 }
 
 // 选择注入到prop中的回调方法
 function mapDispatchToProps(dispatch) {
-  return {
-    refreshAction: () => dispatch(X3DListActions.refreshAction()),
-    getLatestTwentyAwards: gameEn => dispatch(X3DListActions.getRefreshDataAction(gameEn)),
-    getNextPageAwards:
-    (gameEn, lastPeriod) => dispatch(X3DListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
-    getHeaderLabelString: gameEn => dispatch(X3DListActions.getHeaderLabelStringAction(gameEn)),
-    clearData: () => dispatch(X3DListActions.clearDataAction()),
-  };
+    return {
+        refreshAction: () => dispatch(X3DListActions.refreshAction()),
+        getLatestTwentyAwards: gameEn => dispatch(X3DListActions.getRefreshDataAction(gameEn)),
+        getNextPageAwards: (gameEn, lastPeriod) => dispatch(X3DListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
+        getHeaderLabelString: gameEn => dispatch(X3DListActions.getHeaderLabelStringAction(gameEn)),
+        clearData: () => dispatch(X3DListActions.clearDataAction()),
+    };
 }
 
 // 生成容器组件X3DHistoryList

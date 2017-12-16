@@ -15,7 +15,7 @@ import BaseComponent from '../../../components/Views/BaseComponent';
 import PropTypes from 'prop-types';
 class JCZQHistoryList extends BaseComponent {
   static propTypes = {
-    gameEn: PropTypes.string.isRequired,
+    gameEn: PropTypes.string,
     sectionsInfo: PropTypes.array,
     requestDate: PropTypes.instanceOf(Date),
     isRefreshing: PropTypes.bool,
@@ -46,11 +46,12 @@ class JCZQHistoryList extends BaseComponent {
   constructor(props) {
     super(props);
     this.functionBindThis();
+    
   }
 
   componentDidMount() {
     this.props.refreshAction();
-    this.props.getLatestDayAwards(this.props.gameEn, this.props.requestDate);
+    this.props.getLatestDayAwards(this.state.gameEn, this.props.requestDate);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -64,7 +65,7 @@ class JCZQHistoryList extends BaseComponent {
 
   // 下拉刷新
   onRefresh() {
-    this.props.getLatestDayAwards(this.props.gameEn, this.props.requestDate);
+    this.props.getLatestDayAwards(this.state.gameEn, this.props.requestDate);
   }
 
   getHeaderTitle(sectionId) {
@@ -82,7 +83,7 @@ class JCZQHistoryList extends BaseComponent {
 
   datePickerConfirmClicked(date) {
     this.props.refreshAction();
-    this.props.getLatestDayAwards(this.props.gameEn, date);
+    this.props.getLatestDayAwards(this.state.gameEn, date);
   }
 
   sectionHeaderClicked(sectionId, sectionStatus) {
@@ -170,7 +171,7 @@ class JCZQHistoryList extends BaseComponent {
             dissappear={this.props.datePickerViewDissappear}
           />
             :
-          <LotteryToolBar gameEn={this.props.gameEn} />
+          <LotteryToolBar gameEn={this.state.gameEn} />
         }
       </View>
     );
@@ -178,17 +179,17 @@ class JCZQHistoryList extends BaseComponent {
 }
 
 // 选择store中的state注入props
-function mapStateToProps(storeImmutualble) {
-  const store = storeImmutualble.toJS();
+function mapStateToProps(store) {
+  const JCZQHistoryListReducer = store.JCZQHistoryListReducer.toJS();
   return {
-    isRefreshing: store.JCZQHistoryListReducer.isRefreshing,
-    datePickerShow: store.JCZQHistoryListReducer.datePickerShow,
-    lastest3DaysItems: store.JCZQHistoryListReducer.lastest3DaysItems,
-    requestDate: store.JCZQHistoryListReducer.requestDate,
-    sectionsStatus: store.JCZQHistoryListReducer.sectionsStatus,
-    resetHeader: store.JCZQHistoryListReducer.resetHeader,
-    sectionsInfo: store.JCZQHistoryListReducer.sectionsInfo,
-    isEmpty: store.JCZQHistoryListReducer.isEmpty,
+    isRefreshing: JCZQHistoryListReducer.isRefreshing,
+    datePickerShow: JCZQHistoryListReducer.datePickerShow,
+    lastest3DaysItems: JCZQHistoryListReducer.lastest3DaysItems,
+    requestDate: JCZQHistoryListReducer.requestDate,
+    sectionsStatus: JCZQHistoryListReducer.sectionsStatus,
+    resetHeader: JCZQHistoryListReducer.resetHeader,
+    sectionsInfo: JCZQHistoryListReducer.sectionsInfo,
+    isEmpty: JCZQHistoryListReducer.isEmpty,
   };
 }
 

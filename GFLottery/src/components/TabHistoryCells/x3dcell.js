@@ -63,7 +63,7 @@ export default class X3DCell extends BaseComponent {
             { moduleName: 'X3DHistoryList', showStyle: 'push', hideTabbar: true, properties: { gameEn: 'x3d' } });
         };
         return (
-          <TouchableOpacity activeOpacity={1.0} onPress={route} style={{ height: 87 * X_SCALE, flexDirection: 'row', backgroundColor: 'white', alignItems: 'center', justifyContent: 'space-between' }}>
+          <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{ height: 87 * X_SCALE, flexDirection: 'row', backgroundColor: 'white', alignItems: 'center', justifyContent: 'space-between' }}>
             <View style={{ height: 87 * X_SCALE, justifyContent: 'space-between' }}>
               <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={{ marginLeft: 15, fontSize: 16 }}>{'3D'}</Text>

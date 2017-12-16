@@ -33,6 +33,7 @@ export default class SSQCell extends BaseComponent {
         // 列表页需要
         row: PropTypes.string,
         rowData: PropTypes.object,
+        onPress: PropTypes.func,
     };
     static defaultProps = {
         gameEn: 'ssq',
@@ -60,18 +61,9 @@ export default class SSQCell extends BaseComponent {
         };
         if (this.props.cellStyle === 'tabHall') {
             const awardNoArr = getAwardNoArray(this.props.awardNo);
-            const route = () => {
-                NativeModules.LDRNBridge.routeWithURL('reactnative',
-                    {
-                        moduleName: 'SSQHistoryList',
-                        showStyle: 'push',
-                        hideTabbar: true,
-                        properties: {gameEn: this.props.gameEn}
-                    });
-            };
             if (this.props.awardNo) {
                 return (
-                    <TouchableOpacity activeOpacity={1.0} onPress={route} style={{
+                    <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{
                         height: 87 * X_SCALE,
                         flexDirection: 'row',
                         backgroundColor: 'white',
@@ -99,7 +91,7 @@ export default class SSQCell extends BaseComponent {
                                     }
                                     return (
                                         <ImageBackground key={key} style={styles.ball}
-                                               source={require('../../../images/blueBall.png')}>
+                                                         source={require('../../../images/blueBall.png')}>
                                             <Text style={styles.text}>{number}</Text>
                                         </ImageBackground>
                                     );
@@ -169,13 +161,13 @@ export default class SSQCell extends BaseComponent {
                                         if (index <= 5) {
                                             return (
                                                 <ImageBackground key={key} style={styles.ball}
-                                                       source={require('../../../images/redBall.png')}>
+                                                                 source={require('../../../images/redBall.png')}>
                                                     <Text style={styles.text}>{number}</Text>
                                                 </ImageBackground>);
                                         }
                                         return (
                                             <ImageBackground key={key} style={styles.ball}
-                                                   source={require('../../../images/blueBall.png')}>
+                                                             source={require('../../../images/blueBall.png')}>
                                                 <Text style={styles.text}>{number}</Text>
                                             </ImageBackground>
                                         );
@@ -212,13 +204,13 @@ export default class SSQCell extends BaseComponent {
                                     if (index <= 5) {
                                         return (
                                             <ImageBackground key={key} style={styles.ball}
-                                                   source={require('../../../images/transparencyBall.png')}>
+                                                             source={require('../../../images/transparencyBall.png')}>
                                                 <Text style={styles.nonFirstRowtext}>{number}</Text>
                                             </ImageBackground>);
                                     }
                                     return (
                                         <ImageBackground key={key} style={styles.ball}
-                                               source={require('../../../images/transparencyBall.png')}>
+                                                         source={require('../../../images/transparencyBall.png')}>
                                             <Text style={styles.nonFirstBluetext}>{number}</Text>
                                         </ImageBackground>
                                     );

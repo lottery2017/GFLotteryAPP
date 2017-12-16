@@ -1,4 +1,4 @@
-import React,from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { View, ListView, DatePickerAndroid, Platform } from 'react-native';
 import { connect } from 'react-redux';
@@ -16,7 +16,7 @@ import BaseComponent from '../../../components/Views/BaseComponent';
 
 class JCLQHistoryList extends BaseComponent {
   static propTypes = {
-    gameEn: PropTypes.string.isRequired,
+    gameEn: PropTypes.string,
     requestDate: PropTypes.instanceOf(Date),
     isRefreshing: PropTypes.bool,
     sectionsInfo: PropTypes.array,
@@ -47,11 +47,14 @@ class JCLQHistoryList extends BaseComponent {
   constructor(props) {
     super(props);
     this.functionBindThis();
+      this.state = ({
+          gameEn: this.props.navigation.state.params.gameEn
+      })
   }
 
   componentDidMount() {
     this.props.refreshAction();
-    this.props.getLatestDayAwards(this.props.gameEn, this.props.requestDate);
+    this.props.getLatestDayAwards(this.state.gameEn, this.props.requestDate);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -66,7 +69,7 @@ class JCLQHistoryList extends BaseComponent {
 
   // 下拉刷新
   onRefresh() {
-    this.props.getLatestDayAwards(this.props.gameEn, this.props.requestDate);
+    this.props.getLatestDayAwards(this.state.gameEn, this.props.requestDate);
   }
 
   getHeaderTitle(sectionId) {
@@ -84,7 +87,7 @@ class JCLQHistoryList extends BaseComponent {
 
   datePickerConfirmClicked(date) {
     this.props.refreshAction();
-    this.props.getLatestDayAwards(this.props.gameEn, date);
+    this.props.getLatestDayAwards(this.state.gameEn, date);
   }
 
   sectionHeaderClicked(sectionId, sectionStatus) {
@@ -171,7 +174,7 @@ class JCLQHistoryList extends BaseComponent {
             dissappear={this.props.datePickerViewDissappear}
           />
             :
-          <LotteryToolBar gameEn={this.props.gameEn} />
+          <LotteryToolBar gameEn={this.state.gameEn} />
         }
       </View>
     );
@@ -179,17 +182,17 @@ class JCLQHistoryList extends BaseComponent {
 }
 
 // 选择store中的state注入props
-function mapStateToProps(storeImmutualble) {
-  const store = storeImmutualble.toJS();
+function mapStateToProps(store) {
+  const JCLQHistoryListReducer = store.JCLQHistoryListReducer.toJS();
   return {
-    isRefreshing: store.JCLQHistoryListReducer.isRefreshing,
-    datePickerShow: store.JCLQHistoryListReducer.datePickerShow,
-    lastest3DaysItems: store.JCLQHistoryListReducer.lastest3DaysItems,
-    requestDate: store.JCLQHistoryListReducer.requestDate,
-    sectionsStatus: store.JCLQHistoryListReducer.sectionsStatus,
-    resetHeader: store.JCLQHistoryListReducer.resetHeader,
-    sectionsInfo: store.JCLQHistoryListReducer.sectionsInfo,
-    isEmpty: store.JCLQHistoryListReducer.isEmpty,
+    isRefreshing: JCLQHistoryListReducer.isRefreshing,
+    datePickerShow: JCLQHistoryListReducer.datePickerShow,
+    lastest3DaysItems: JCLQHistoryListReducer.lastest3DaysItems,
+    requestDate: JCLQHistoryListReducer.requestDate,
+    sectionsStatus: JCLQHistoryListReducer.sectionsStatus,
+    resetHeader: JCLQHistoryListReducer.resetHeader,
+    sectionsInfo: JCLQHistoryListReducer.sectionsInfo,
+    isEmpty: JCLQHistoryListReducer.isEmpty,
   };
 }
 

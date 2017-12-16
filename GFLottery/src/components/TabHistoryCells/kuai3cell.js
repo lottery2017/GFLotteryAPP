@@ -71,14 +71,10 @@ export default class KUAI3Cell extends BaseComponent {
       return <Image source={require('../../../images/Dice_6.png')} />;
     };
     if (this.props.cellStyle === 'tabHall') {
-      const route = () => {
-        NativeModules.LDRNBridge.routeWithURL('reactnative',
-          { moduleName: 'K3HistoryList', showStyle: 'push', hideTabbar: true, properties: { gameEn: this.props.gameEn } });
-      };
       const awardNoArr = getAwardNoArray(this.props.awardNo);
       if (this.props.awardNo) {
         return (
-          <TouchableOpacity activeOpacity={1.0} onPress={route} style={{ height: 87 * X_SCALE, flexDirection: 'row', backgroundColor: 'white', alignItems: 'center', justifyContent: 'space-between' }}>
+          <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{ height: 87 * X_SCALE, flexDirection: 'row', backgroundColor: 'white', alignItems: 'center', justifyContent: 'space-between' }}>
             <View style={{ height: 87 * X_SCALE, justifyContent: 'space-between' }}>
               <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={{ marginLeft: 15, fontSize: 16 }}>{GlobalHelper

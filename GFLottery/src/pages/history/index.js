@@ -27,9 +27,19 @@ import BaseComponent from "../../components/Views/BaseComponent";
 import HallNoticeView from "../../components/Views/HallNoticeView";
 import PropTypes from "prop-types";
 import Immutable from 'immutable';
+import TabBarItem from "../../components/TabBarItem/TabBarItem";
 class TabHistoryHall extends BaseComponent {
     static navigationOptions = {
         tabBarLabel: '开奖',
+        tabBarIcon: ({focused, tintColor}) => (
+            <TabBarItem
+                tintColor={tintColor}
+                focused={focused}
+                normalImage={require('../../images/TabBar_History.png')}
+                selectedImage={require('../../images/TabBar_History_selected.png')}
+            />
+        )
+
     };
 
     static propTypes = {
@@ -117,6 +127,9 @@ class TabHistoryHall extends BaseComponent {
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
                     gameEn={gameEn}
+                    onPress={() => {
+                        this.props.navigation.navigate('SSQHistoryList', {gameEn: gameEn})
+                    }}
                     cellStyle="tabHall"
                 />);
         } else if (gameEn === 'dlt') {
@@ -127,6 +140,9 @@ class TabHistoryHall extends BaseComponent {
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
                     gameEn={gameEn}
+                    onPress={() => {
+                        this.props.navigation.navigate('DLTHistoryList', {gameEn: gameEn})
+                    }}
                     cellStyle="tabHall"
                 />);
         } else if (gameEn === 'd11' || gameEn === 'jxd11' || gameEn === 'hljdd11' || gameEn === 'lnd11' || gameEn === 'gdd11' || gameEn === 'zjd11' || gameEn === 'hljd11' || gameEn === 'cqd11') {
@@ -137,6 +153,9 @@ class TabHistoryHall extends BaseComponent {
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
+                    onPress={() => {
+                        this.props.navigation.navigate('SYXWHistoryList', {gameEn: gameEn})
+                    }}
                     cellStyle="tabHall"
                 />);
         } else if (gameEn === 'pl3') {
@@ -192,6 +211,9 @@ class TabHistoryHall extends BaseComponent {
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
+                    onPress={() => {
+                        this.props.navigation.navigate('SSCHistoryList', {gameEn: gameEn})
+                    }}
                     cellStyle="tabHall"
                 />);
         } else if (gameEn === 'x3d') {
@@ -203,6 +225,9 @@ class TabHistoryHall extends BaseComponent {
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
                     gameEn={gameEn}
+                    onPress={() => {
+                        this.props.navigation.navigate('X3DHistoryList', {gameEn: gameEn})
+                    }}
                     cellStyle="tabHall"
                 />);
         } else if (gameEn === 'kuai3' || gameEn === 'nmgkuai3' || gameEn === 'ahkuai3' || gameEn === 'gxkuai3' || gameEn === 'oldkuai3' || gameEn === 'hbkuai3') {
@@ -213,6 +238,9 @@ class TabHistoryHall extends BaseComponent {
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
+                    onPress={() => {
+                        this.props.navigation.navigate('K3HistoryList', {gameEn: gameEn})
+                    }}
                     cellStyle="tabHall"
                 />);
         } else if (gameEn === 'football_sfc') {
@@ -223,6 +251,9 @@ class TabHistoryHall extends BaseComponent {
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
+                    onPress={() => {
+                        this.props.navigation.navigate('SFCHistoryList', {gameEn: gameEn})
+                    }}
                     cellStyle="tabHall"
                 />);
         } else if (gameEn === 'klpk') {
@@ -248,6 +279,9 @@ class TabHistoryHall extends BaseComponent {
                 <JCZQCell
                     key={index}
                     matchItem={this.props.awardInfoNew.jczq}
+                    onPress={() => {
+                        this.props.navigation.navigate('JCZQHistoryList', {gameEn: gameEn})
+                    }}
                     gameEn={gameEn}
                 />);
         } else if (gameEn === 'jclq') {
@@ -255,6 +289,9 @@ class TabHistoryHall extends BaseComponent {
                 <JCLQCell
                     key={index}
                     matchItem={this.props.awardInfoNew.jclq}
+                    onPress={() => {
+                        this.props.navigation.navigate('JCLQHistoryList', {gameEn: gameEn})
+                    }}
                     gameEn={gameEn}
                 />);
         } else if (gameEn === 'dcsfgg') {
@@ -300,8 +337,6 @@ class TabHistoryHall extends BaseComponent {
 function mapStateToProps(store) {
     //const store = Immutable.toJS();
     var tabHistoryHallReducer = store.tabHistoryHallReducer.toJS();
-
-    console.log(JSON.stringify(tabHistoryHallReducer.isRefreshing));
     return {
         isRefreshing: tabHistoryHallReducer.isRefreshing,
         awardInfo: tabHistoryHallReducer.awardInfo,
