@@ -207,17 +207,17 @@ export default class DLTCell extends BaseComponent {
                                     const key = `${number} ${index}`;
                                     if (index <= 4) {
                                         return (
-                                            <Image key={key} style={styles.ball}
+                                            <ImageBackground key={key} style={styles.ball}
                                                    source={require('../../../images/transparencyBall.png')}>
                                                 <Text style={styles.nonFirstRowtext}>{number}</Text>
-                                            </Image>
+                                            </ImageBackground>
                                         );
                                     }
                                     return (
-                                        <Image key={key} style={styles.ball}
+                                        <ImageBackground key={key} style={styles.ball}
                                                source={require('../../../images/transparencyBall.png')}>
                                             <Text style={styles.nonFirstBluetext}>{number}</Text>
-                                        </Image>
+                                        </ImageBackground>
                                     );
                                 })}
                             </View>

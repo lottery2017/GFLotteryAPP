@@ -166,7 +166,7 @@ class JCLQHistoryList extends BaseComponent {
           dataSource={dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs)}
           empty={this.props.isEmpty}
           isRefreshing={this.props.isRefreshing}
-          isSectionStyle
+          //isSectionStyle
         />
         {
           this.props.datePickerShow ? <DatePickerView

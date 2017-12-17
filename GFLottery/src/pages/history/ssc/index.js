@@ -8,10 +8,13 @@ import LotteryToolBar from '../../../components/Views/LotteryToolBar';
 import CommonNaviBar from '../../../components/Views/CommonNaviBar';
 import {LoadMoreStatus} from '../../../components/Views/LDRLScroll/LDLoadMoreRefresh';
 import LDCPHistoryListView from '../../../components/Views/LDCPHistoryListView';
-import * as helper from '../../../utils/GlobalHelper';
+import * as GlobalHelper from '../../../utils/GlobalHelper';
 import BaseComponent from '../../../components/Views/BaseComponent';
 
 class SSCHistoryList extends BaseComponent {
+    static navigationOptions = ({navigation}) => ({
+        title: GlobalHelper.getCNNameFor(navigation.state.params.gameEn)
+    });
     static propTypes = {
         gameEn: PropTypes.string,
         isRefreshing: PropTypes.bool,
@@ -35,13 +38,14 @@ class SSCHistoryList extends BaseComponent {
         super(props);
         this.functionBindThis();
         this.state = ({
-            gameEn: this.props.navigation.state.params.gameEn
+            gameEn: this.props.navigation.state.params.gameEn,
+            periodName: this.props.navigation.state.params.periodName,
         })
     }
 
     componentDidMount() {
         this.props.refreshAction();
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -59,7 +63,7 @@ class SSCHistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     // 上拉加载更多
@@ -87,7 +91,6 @@ class SSCHistoryList extends BaseComponent {
         const {historyItems} = this.props;
         return (
             <View style={{flex: 1}}>
-                <CommonNaviBar middleTitle={helper.getCNNameFor(this.state.gameEn)}/>
                 <LDCPHistoryListView
                     ref={(ref) => {
                         this.listView = ref;
@@ -125,7 +128,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(SSCListActions.refreshAction()),
-        getLatestTwentyAwards: gameEn => dispatch(SSCListActions.getRefreshDataAction(gameEn)),
+        getLatestTwentyAwards: (gameEn, periodName) => dispatch(SSCListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(SSCListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         clearData: () => dispatch(SSCListActions.clearDataAction()),
     };

@@ -11,7 +11,6 @@ export function xmlGet(url) {
       }
       if (request.status === 200) {
         // console.log('====>>>>>request.responseText');
-        // console.log(request.responseText);
         const json = new X2JS().xml2js(request.responseText);
         // console.log('====>>>>>json');
         // console.log(json);

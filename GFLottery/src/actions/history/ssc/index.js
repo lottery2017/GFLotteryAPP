@@ -8,9 +8,8 @@ export const clearDataAction = createAction(types.SSCHISTORYLIST_CLEARDATA);// �
 
 // 获得最近的20条数据
 export const getLatestTwentyAwards = createAction(types.SSCHISTORYLIST_REFRESHLIST,
-async (gameEn) => {
-  const period = await NativeModules.PTCRNBridge.getIssueFromBetDicByGame(gameEn);
-  const latestTwentyItems = await SSCHistoryListService.getLatestTwentyAwards(gameEn, period);
+async (gameEn,periodName) => {
+  const latestTwentyItems = await SSCHistoryListService.getLatestTwentyAwards(gameEn, periodName);
   return {
     latestTwentyItems: latestTwentyItems && latestTwentyItems.lottery && latestTwentyItems
     .lottery.game && latestTwentyItems.lottery.game
@@ -18,9 +17,9 @@ async (gameEn) => {
   };
 });
 
-export function getRefreshDataAction(gameEn) {
+export function getRefreshDataAction(gameEn,periodName) {
   return async (dispatch) => {
-    dispatch(getLatestTwentyAwards(gameEn));
+    dispatch(getLatestTwentyAwards(gameEn,periodName));
   };
 }
 

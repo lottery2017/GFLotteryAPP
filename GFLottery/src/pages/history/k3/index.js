@@ -8,10 +8,13 @@ import LotteryToolBar from '../../../components/Views/LotteryToolBar';
 import CommonNaviBar from '../../../components/Views/CommonNaviBar';
 import {LoadMoreStatus} from '../../../components/Views/LDRLScroll/LDLoadMoreRefresh';
 import LDCPHistoryListView from '../../../components/Views/LDCPHistoryListView';
-import * as helper from '../../../utils/GlobalHelper';
+import * as GlobalHelper from '../../../utils/GlobalHelper';
 import BaseComponent from '../../../components/Views/BaseComponent';
 
 class K3HistoryList extends BaseComponent {
+    static navigationOptions = ({navigation}) => ({
+        title: GlobalHelper.getCNNameFor(navigation.state.params.gameEn)
+    });
     static propTypes = {
         gameEn: PropTypes.string,
         isRefreshing: PropTypes.bool,
@@ -35,13 +38,14 @@ class K3HistoryList extends BaseComponent {
         super(props);
         this.functionBindThis();
         this.state = ({
-            gameEn: this.props.navigation.state.params.gameEn
+            gameEn: this.props.navigation.state.params.gameEn,
+            periodName: this.props.navigation.state.params.periodName,
         })
     }
 
     componentDidMount() {
         this.props.refreshAction();
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -59,7 +63,7 @@ class K3HistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     // 上拉加载更多
@@ -89,7 +93,6 @@ class K3HistoryList extends BaseComponent {
         const {historyItems} = this.props;
         return (
             <View style={{flex: 1}}>
-                <CommonNaviBar middleTitle={helper.getCNNameFor(this.state.gameEn)}/>
                 <LDCPHistoryListView
                     ref={(ref) => {
                         this.listView = ref;
@@ -127,7 +130,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(K3ListActions.refreshAction()),
-        getLatestTwentyAwards: gameEn => dispatch(K3ListActions.getRefreshDataAction(gameEn)),
+        getLatestTwentyAwards: (gameEn, periodName) => dispatch(K3ListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(K3ListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         clearData: () => dispatch(K3ListActions.clearDataAction()),
     };

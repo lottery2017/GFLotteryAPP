@@ -38,12 +38,9 @@ export default class JCLQCell extends BaseComponent {
     return null;
   }
   render() {
-    const route = () => {
-      NativeModules.LDRNBridge.routeWithURL('reactnative', { moduleName: 'JCLQHistoryList', showStyle: 'push', hideTabbar: true, properties: { gameEn: 'jclq' } });
-    };
     if (this.props.matchItem) {
       return (
-        <TouchableOpacity activeOpacity={1.0} onPress={route} style={{ height: 87 * X_SCALE, flexDirection: 'row', backgroundColor: 'white', alignItems: 'center', justifyContent: 'space-between' }}>
+        <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{ height: 87 * X_SCALE, flexDirection: 'row', backgroundColor: 'white', alignItems: 'center', justifyContent: 'space-between' }}>
           <View style={{ width: SCREEN_WIDTH - 60, height: 87 * X_SCALE, justifyContent: 'space-between' }}>
             <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
               <Text style={{ marginLeft: 15, fontSize: 16 }}>竞彩篮球</Text>

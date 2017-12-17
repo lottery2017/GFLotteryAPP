@@ -119,26 +119,27 @@ export default class LDCPHistoryListView extends LDRLListView {
             />
         );
     }
-
+    onLayout(event){
+        const layout = event.nativeEvent.layout;
+        this.setState(
+            {
+                emptyHintViewHeight: layout.height,
+                loadingViewHeight: layout.height,
+            },
+        );
+    }
     getList() {
         if (this.props.empty || this.props.isRefreshing) {
             const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
             const historyItems = [1];
             return (
                 <LDRLListView
+                    //removeClippedSubviews={false}
                     style={{backgroundColor: '#f4f4f4'}}
                     ref={(ref) => {
                         this.ldcpListView = ref;
                     }}
-                    onLayout={(event) => {
-                        const layout = event.nativeEvent.layout;
-                        this.setState(
-                            {
-                                emptyHintViewHeight: layout.height,
-                                loadingViewHeight: layout.height,
-                            },
-                        );
-                    }}
+                    onLayout={this.onLayout.bind(this)}
                     renderRow={this.renderRow}
                     dataSource={ds.cloneWithRows(historyItems)}
                     automaticallyAdjustContentInsets={false}

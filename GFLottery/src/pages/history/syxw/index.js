@@ -34,14 +34,19 @@ class SYXWHistoryList extends BaseComponent {
     constructor(props) {
         super(props);
         this.functionBindThis();
-        this.state=({
-            gameEn:this.props.navigation.state.params.gameEn
+        this.state = ({
+            gameEn: this.props.navigation.state.params.gameEn,
+            periodName: this.props.navigation.state.params.periodName,
         })
     }
 
+    static navigationOptions = ({navigation}) => ({
+        title: GlobalHelper.getCNNameFor(navigation.state.params.gameEn)
+    });
+
     componentDidMount() {
         this.props.refreshAction();
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -59,7 +64,7 @@ class SYXWHistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     // 上拉加载更多
@@ -87,7 +92,6 @@ class SYXWHistoryList extends BaseComponent {
         const {historyItems} = this.props;
         return (
             <View style={{flex: 1}}>
-                <CommonNaviBar middleTitle={GlobalHelper.getCNNameFor(this.state.gameEn)}/>
                 <LDCPHistoryListView
                     ref={(ref) => {
                         this.listView = ref;
@@ -125,7 +129,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(SYXWListActions.refreshAction()),
-        getLatestTwentyAwards: (gameEn) => dispatch(SYXWListActions.getRefreshDataAction(gameEn)),
+        getLatestTwentyAwards: (gameEn, periodName) => dispatch(SYXWListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(SYXWListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         clearData: () => dispatch(SYXWListActions.clearDataAction()),
     };

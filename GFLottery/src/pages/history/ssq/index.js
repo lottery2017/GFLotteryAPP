@@ -6,7 +6,6 @@ import SSQCell from '../../../components/TabHistoryCells/ssqcell';
 import * as SSQListActions from '../../../actions/history/ssq';
 import HistoryListHeader from '../../../components/HistoryListHeader/HistoryListHeader';
 import LotteryToolBar from '../../../components/Views/LotteryToolBar';
-import CommonNaviBar from '../../../components/Views/CommonNaviBar';
 import {LoadMoreStatus} from '../../../components/Views/LDRLScroll/LDLoadMoreRefresh';
 import LDCPHistoryListView from '../../../components/Views/LDCPHistoryListView';
 import BaseComponent from '../../../components/Views/BaseComponent';
@@ -38,7 +37,8 @@ class SSQHistoryList extends BaseComponent {
         super(props);
         this.functionBindThis();
         this.state=({
-            gameEn:this.props.navigation.state.params.gameEn
+            gameEn:this.props.navigation.state.params.gameEn,
+            periodName:this.props.navigation.state.params.periodName,
         })
     }
 
@@ -48,7 +48,7 @@ class SSQHistoryList extends BaseComponent {
             },
         );
         this.props.refreshAction();
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn,this.state.periodName);
         this.props.getHeaderLabelString(this.state.gameEn);
     }
 
@@ -70,7 +70,7 @@ class SSQHistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn,this.state.periodName);
     }
 
     // 上拉加载更多
@@ -146,7 +146,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(SSQListActions.refreshAction()),
-        getLatestTwentyAwards: gameEn => dispatch(SSQListActions.getRefreshDataAction(gameEn)),
+        getLatestTwentyAwards: (gameEn,periodName) => dispatch(SSQListActions.getRefreshDataAction(gameEn,periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(SSQListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         getHeaderLabelString: gameEn => dispatch(SSQListActions.getHeaderLabelStringAction(gameEn)),
         clearData: () => dispatch(SSQListActions.clearDataAction()),

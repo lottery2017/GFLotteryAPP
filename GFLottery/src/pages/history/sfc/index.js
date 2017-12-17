@@ -35,13 +35,14 @@ class SFCHistoryList extends BaseComponent {
         super(props);
         this.functionBindThis();
         this.state = ({
-            gameEn: this.props.navigation.state.params.gameEn
+            gameEn: this.props.navigation.state.params.gameEn,
+            periodName: this.props.navigation.state.params.periodName
         })
     }
 
     componentDidMount() {
         this.props.refreshAction();
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -59,7 +60,7 @@ class SFCHistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     // 上拉加载更多
@@ -89,7 +90,6 @@ class SFCHistoryList extends BaseComponent {
         const {historyItems} = this.props;
         return (
             <View style={{flex: 1}}>
-                <CommonNaviBar middleTitle={helper.getCNNameFor(this.state.gameEn)}/>
                 <LDCPHistoryListView
                     ref={(ref) => {
                         this.listView = ref;
@@ -127,7 +127,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(SFCListActions.refreshAction()),
-        getLatestTwentyAwards: gameEn => dispatch(SFCListActions.getRefreshDataAction(gameEn)),
+        getLatestTwentyAwards: (gameEn, periodName) => dispatch(SFCListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(SFCListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         clearData: () => dispatch(SFCListActions.clearDataAction()),
     };

@@ -120,41 +120,44 @@ class TabHistoryHall extends BaseComponent {
     renderItem({item, index}) {
         let gameEn = item;
         if (gameEn === 'ssq') {
+            let periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <SSQCell
                     key={index}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
-                    periodName={this.findDataByGameEn(gameEn).periodName}
+                    periodName={periodName}
                     gameEn={gameEn}
                     onPress={() => {
-                        this.props.navigation.navigate('SSQHistoryList', {gameEn: gameEn})
+                        this.props.navigation.navigate('SSQHistoryList', {gameEn: gameEn, periodName: periodName})
                     }}
                     cellStyle="tabHall"
                 />);
         } else if (gameEn === 'dlt') {
+            const periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <DLTCell
                     key={index}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
-                    periodName={this.findDataByGameEn(gameEn).periodName}
+                    periodName={periodName}
                     gameEn={gameEn}
                     onPress={() => {
-                        this.props.navigation.navigate('DLTHistoryList', {gameEn: gameEn})
+                        this.props.navigation.navigate('DLTHistoryList', {gameEn: gameEn, periodName: periodName})
                     }}
                     cellStyle="tabHall"
                 />);
         } else if (gameEn === 'd11' || gameEn === 'jxd11' || gameEn === 'hljdd11' || gameEn === 'lnd11' || gameEn === 'gdd11' || gameEn === 'zjd11' || gameEn === 'hljd11' || gameEn === 'cqd11') {
+            const periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <SYXWCell
                     key={index}
                     gameEn={gameEn}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
-                    periodName={this.findDataByGameEn(gameEn).periodName}
+                    periodName={periodName}
                     onPress={() => {
-                        this.props.navigation.navigate('SYXWHistoryList', {gameEn: gameEn})
+                        this.props.navigation.navigate('SYXWHistoryList', {gameEn: gameEn, periodName: periodName})
                     }}
                     cellStyle="tabHall"
                 />);
@@ -204,55 +207,59 @@ class TabHistoryHall extends BaseComponent {
                     gameEn={gameEn}
                 />);
         } else if (gameEn === 'ssc' || gameEn === 'jxssc') {
+            const periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <SSCCell
                     key={index}
                     gameEn={gameEn}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
-                    periodName={this.findDataByGameEn(gameEn).periodName}
+                    periodName={periodName}
                     onPress={() => {
-                        this.props.navigation.navigate('SSCHistoryList', {gameEn: gameEn})
+                        this.props.navigation.navigate('SSCHistoryList', {gameEn: gameEn, periodName: periodName})
                     }}
                     cellStyle="tabHall"
                 />);
         } else if (gameEn === 'x3d') {
+            const periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <X3DCell
                     key={index}
                     extra={this.findDataByGameEn(gameEn).extra}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
-                    periodName={this.findDataByGameEn(gameEn).periodName}
+                    periodName={periodName}
                     gameEn={gameEn}
                     onPress={() => {
-                        this.props.navigation.navigate('X3DHistoryList', {gameEn: gameEn})
+                        this.props.navigation.navigate('X3DHistoryList', {gameEn: gameEn, periodName: periodName})
                     }}
                     cellStyle="tabHall"
                 />);
         } else if (gameEn === 'kuai3' || gameEn === 'nmgkuai3' || gameEn === 'ahkuai3' || gameEn === 'gxkuai3' || gameEn === 'oldkuai3' || gameEn === 'hbkuai3') {
+            const periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <KUAI3Cell
                     key={index}
                     gameEn={gameEn}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
-                    periodName={this.findDataByGameEn(gameEn).periodName}
+                    periodName={periodName}
                     onPress={() => {
-                        this.props.navigation.navigate('K3HistoryList', {gameEn: gameEn})
+                        this.props.navigation.navigate('K3HistoryList', {gameEn: gameEn, periodName: periodName})
                     }}
                     cellStyle="tabHall"
                 />);
         } else if (gameEn === 'football_sfc') {
+            const periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <SFCCell
                     key={index}
                     gameEn={gameEn}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
-                    periodName={this.findDataByGameEn(gameEn).periodName}
+                    periodName={periodName}
                     onPress={() => {
-                        this.props.navigation.navigate('SFCHistoryList', {gameEn: gameEn})
+                        this.props.navigation.navigate('SFCHistoryList', {gameEn: gameEn, periodName: periodName})
                     }}
                     cellStyle="tabHall"
                 />);

@@ -43,6 +43,7 @@ class DLTHistoryList extends BaseComponent {
         this.functionBindThis();
         this.state = {
             gameEn: this.props.navigation.state.params.gameEn,
+            periodName:this.props.navigation.state.params.periodName,
         }
     }
 
@@ -52,7 +53,7 @@ class DLTHistoryList extends BaseComponent {
             },
         );
         this.props.refreshAction();
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn,this.state.periodName);
         this.props.getHeaderLabelString(this.state.gameEn);
     }
 
@@ -74,7 +75,7 @@ class DLTHistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn,this.state.periodName);
     }
 
     // 上拉加载更多
@@ -153,7 +154,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(DLTListActions.refreshAction()),
-        getLatestTwentyAwards: gameEn => dispatch(DLTListActions.getRefreshDataAction(gameEn)),
+        getLatestTwentyAwards: (gameEn,periodName) => dispatch(DLTListActions.getRefreshDataAction(gameEn,periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(DLTListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         getHeaderLabelString: gameEn => dispatch(DLTListActions.getHeaderLabelStringAction(gameEn)),
         clearData: () => dispatch(DLTListActions.clearDataAction()),

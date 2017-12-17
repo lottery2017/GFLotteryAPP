@@ -80,14 +80,14 @@ export default function LotteryToolBar(props) {
               {`投注${GlobalHelper.getCNNameFor(props.gameEn)}`}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/*<TouchableOpacity
             style={styles.touchableOpacityQuery}
             onPress={() => { NativeModules.LDRNBridge.routeWithURL(`rrzcp://calculatePrize?gameEn=${props.gameEn}`, {}); }}
           >
             <Text style={styles.textQuery}>
               中奖查询
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
         </View>
       );
     case 'd11':

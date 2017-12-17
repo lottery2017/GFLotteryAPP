@@ -69,15 +69,6 @@ export default class SSCCell extends BaseComponent {
         };
         if (this.props.cellStyle === 'tabHall') {
             const awardNoArr = getAwardNoArray(this.props.awardNo);
-            const route = () => {
-                NativeModules.LDRNBridge.routeWithURL('reactnative',
-                    {
-                        moduleName: 'SSCHistoryList',
-                        showStyle: 'push',
-                        hideTabbar: true,
-                        properties: {gameEn: this.props.gameEn}
-                    });
-            };
             if (this.props.awardNo) {
                 return (
                     <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{
@@ -183,9 +174,9 @@ export default class SSCCell extends BaseComponent {
                                     {awardNoArr.map((number, index) => {
                                         const key = `${number} ${index}`;
                                         return (
-                                            <Image key={key} style={styles.ball} source={bgImage}>
+                                            <ImageBackground key={key} style={styles.ball} source={bgImage}>
                                                 <Text style={textStyle}>{number}</Text>
-                                            </Image>);
+                                            </ImageBackground>);
                                     })}
                                     <Text style={{marginLeft: 10}}>{getAwardDescription(this
                                         .props.rowData.awardNo)}</Text>

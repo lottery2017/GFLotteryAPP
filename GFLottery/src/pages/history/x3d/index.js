@@ -42,7 +42,8 @@ class X3DHistoryList extends BaseComponent {
         super(props);
         this.functionBindThis();
         this.state = ({
-            gameEn: this.props.navigation.state.params.gameEn
+            gameEn: this.props.navigation.state.params.gameEn,
+            periodName: this.props.navigation.state.params.periodName,
         })
     }
 
@@ -52,7 +53,7 @@ class X3DHistoryList extends BaseComponent {
             },
         );
         this.props.refreshAction();
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
         this.props.getHeaderLabelString(this.state.gameEn);
     }
 
@@ -74,7 +75,7 @@ class X3DHistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
-        this.props.getLatestTwentyAwards(this.state.gameEn);
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     // 上拉加载更多
@@ -115,7 +116,6 @@ class X3DHistoryList extends BaseComponent {
         const {historyItems} = this.props;
         return (
             <View style={{flex: 1}}>
-                <CommonNaviBar middleTitle={helper.getCNNameFor(this.state.gameEn)}/>
                 <LDCPHistoryListView
                     ref={(ref) => {
                         this.listView = ref;
@@ -154,7 +154,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(X3DListActions.refreshAction()),
-        getLatestTwentyAwards: gameEn => dispatch(X3DListActions.getRefreshDataAction(gameEn)),
+        getLatestTwentyAwards: (gameEn, periodName) => dispatch(X3DListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(X3DListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         getHeaderLabelString: gameEn => dispatch(X3DListActions.getHeaderLabelStringAction(gameEn)),
         clearData: () => dispatch(X3DListActions.clearDataAction()),
