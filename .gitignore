@@ -1,0 +1,8 @@
+
+# Node
+GFLottery/node_modules
+GFLottery/*.log
+GFLottery/.nvm
+
+# OS X
+GFLottery/.DS_Store
