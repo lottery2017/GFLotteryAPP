@@ -1,5 +1,5 @@
 import React from "react";
-import {View, Text, FlatList} from "react-native";
+import {FlatList, View} from "react-native";
 import {connect} from "react-redux";
 import SSQCell from "../../components/TabHistoryCells/ssqcell";
 import DLTCell from "../../components/TabHistoryCells/dltcell";
@@ -22,12 +22,11 @@ import ZQDCCell from "../../components/TabHistoryCells/zqdccell";
 import CommonNaviBar from "../../components/Views/CommonNaviBar";
 import HistoryawardsPushSettingsView from "../../components/Views/HistoryawardsPushSettingsView";
 import * as TabHistoryHallActions from "../../actions/history/TabHall";
-import LDCPHistoryScrollView from "../../components/Views/LDCPHistoryScrollView";
 import BaseComponent from "../../components/Views/BaseComponent";
 import HallNoticeView from "../../components/Views/HallNoticeView";
 import PropTypes from "prop-types";
-import Immutable from 'immutable';
 import TabBarItem from "../../components/TabBarItem/TabBarItem";
+import CommonStyles from "../../styles/CommonStyles";
 class TabHistoryHall extends BaseComponent {
     static navigationOptions = {
         tabBarIcon: ({focused, tintColor}) => (
@@ -70,7 +69,6 @@ class TabHistoryHall extends BaseComponent {
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.isRefreshing) {
-            //this.scrollView.endRefresh();
         }
     }
 
@@ -101,6 +99,10 @@ class TabHistoryHall extends BaseComponent {
         return null;
     }
 
+    _separator = () => {
+        return (<View style={CommonStyles.lineStyle}/>)
+    }
+
     renderContent() {
         if (this.props.gameEnArray && this.props.gameEnArray.length > 0) {
             return (
@@ -109,6 +111,7 @@ class TabHistoryHall extends BaseComponent {
                     keyExtractor={this._keyExtractor}
                     onRefresh={this.onRefresh}
                     refreshing={this.props.isRefreshing}
+                    ItemSeparatorComponent={this._separator}
                     renderItem={this.renderItem.bind(this)}/>)
         }
         return null;

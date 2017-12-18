@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, ListView, NativeModules, NativeEventEmitter} from 'react-native';
+import {View, ListView, NativeModules, NativeEventEmitter,FlatList} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import SSQCell from '../../../components/TabHistoryCells/ssqcell';
@@ -9,6 +9,7 @@ import LotteryToolBar from '../../../components/Views/LotteryToolBar';
 import {LoadMoreStatus} from '../../../components/Views/LDRLScroll/LDLoadMoreRefresh';
 import LDCPHistoryListView from '../../../components/Views/LDCPHistoryListView';
 import BaseComponent from '../../../components/Views/BaseComponent';
+import CommonStyles from "../../../styles/CommonStyles";
 
 class SSQHistoryList extends BaseComponent {
     static propTypes = {
@@ -53,12 +54,12 @@ class SSQHistoryList extends BaseComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!nextProps.isRefreshing) {
+       /* if (!nextProps.isRefreshing) {
             this.listView.endRefresh();
         }
         if (nextProps.historyItems.length > 0) {
             this.listView.setLoadMoreStatus(LoadMoreStatus.idle);
-        }
+        }*/
     }
 
     componentWillUnmount() {
@@ -90,9 +91,9 @@ class SSQHistoryList extends BaseComponent {
         this.renderRow = this.renderRow.bind(this);
     }
 
-    renderRow(rowData, sectionID, rowID) {
+    renderRow({item,index}) {
         return (
-            <SSQCell gameEn={this.state.gameEn} rowData={rowData} row={rowID}
+            <SSQCell gameEn={this.state.gameEn} rowData={item} row={index}
                      cellStyle="historyList"/>
         );
     }
@@ -102,28 +103,22 @@ class SSQHistoryList extends BaseComponent {
             <HistoryListHeader headerLabelString={this.props.headerLabelString}/>
         );
     }
-
+    _keyExtractor = (item, index) => item.index;
+    _separator = () => {
+        return (<View style={CommonStyles.lineStyle}/>)
+    }
     render() {
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        const {historyItems} = this.props;
         return (
             <View style={{flex: 1}}>
-                <LDCPHistoryListView
-                    ref={(ref) => {
-                        this.listView = ref;
-                    } }
-                    renderRow={this.renderRow}
-                    dataSource={ds.cloneWithRows(historyItems)}
-                    automaticallyAdjustContentInsets={false}
-                    horizontal={false}
+                <FlatList
+                    data={this.props.historyItems}
+                    keyExtractor={this._keyExtractor}
                     onRefresh={this.onRefresh}
-                    onLoadMore={this.onEndReached}
-                    isShowLoadMore={this.props.hasNextPage}
-                    enableEmptySections
-                    renderHeader={this.renderHeader}
-                    empty={this.props.isEmpty}
-                    isRefreshing={this.props.isRefreshing}
-                />
+                    onEndReached={this.onEndReached}
+                    refreshing={this.props.isRefreshing}
+                    renderItem={this.renderRow.bind(this)}/>
+
+                    {/*isShowLoadMore={this.props.hasNextPage}*/}
                 <LotteryToolBar gameEn={this.state.gameEn}/>
             </View>
         );

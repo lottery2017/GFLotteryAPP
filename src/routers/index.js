@@ -33,17 +33,18 @@ const TabbarNavigator = TabNavigator({
         activeTintColor: '#4BC1D2',
         inactiveTintColor: '#000',
         showIcon: true,
-        showLabel: true,
         upperCaseLabel: false,
         pressColor: '#823453',
         pressOpacity: 0.8,
-        showLabel:false,
+        showLabel: false,
         style: {
-            height:49 ,
+            height: 49,
         },
         labelStyle: {
-            fontSize: 12,
-            margin: 1
+            margin: 0
+        },
+        iconStyle: {
+            height: 35, width: 35,
         },
         indicatorStyle: {height: 0}, //android 中TabBar下面会显示一条线，高度设为 0 后就不显示线了
     },
@@ -86,13 +87,13 @@ const AppNavigator = StackNavigator({
         navigationOptions: {
             title: '胜负彩',
         }
-    },JCZQHistoryList:{
-        screen:JCZQHistoryList,
+    }, JCZQHistoryList: {
+        screen: JCZQHistoryList,
         navigationOptions: {
             title: '竞彩足球',
         }
-    },JCLQHistoryList:{
-        screen:JCLQHistoryList,
+    }, JCLQHistoryList: {
+        screen: JCLQHistoryList,
         navigationOptions: {
             title: '竞彩篮球',
         }
