@@ -30,7 +30,6 @@ import Immutable from 'immutable';
 import TabBarItem from "../../components/TabBarItem/TabBarItem";
 class TabHistoryHall extends BaseComponent {
     static navigationOptions = {
-        tabBarLabel: '开奖',
         tabBarIcon: ({focused, tintColor}) => (
             <TabBarItem
                 tintColor={tintColor}

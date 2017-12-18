@@ -37,11 +37,9 @@ const TabbarNavigator = TabNavigator({
         upperCaseLabel: false,
         pressColor: '#823453',
         pressOpacity: 0.8,
+        showLabel:false,
         style: {
-            backgroundColor: '#fff',
-            paddingBottom: 0,
-            borderTopWidth: 0.5,
-            borderTopColor: '#ccc',
+            height:49 ,
         },
         labelStyle: {
             fontSize: 12,
@@ -51,7 +49,7 @@ const TabbarNavigator = TabNavigator({
     },
     tabBarPosition: 'bottom',
     swipeEnabled: true,
-    animationEnabled: true,
+    animationEnabled: false,
     lazy: true,
     backBehavior: 'none',
 });

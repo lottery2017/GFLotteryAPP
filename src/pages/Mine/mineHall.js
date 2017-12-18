@@ -6,7 +6,6 @@ import {Text, View} from "react-native";
 import TabBarItem from "../../components/TabBarItem/TabBarItem";
 export default class MineHall extends Component {
     static navigationOptions = {
-        tabBarLabel: '我的',
         tabBarIcon: ({focused, tintColor}) => (
             <TabBarItem
                 tintColor={tintColor}
