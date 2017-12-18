@@ -1,8 +1,25 @@
+.svn/
+# Xcode, Gradle
+build/
+**.xcuserstate
+
+# Android
+.idea
+.gradle
+local.properties
+*.iml
 
 # Node
-GFLottery/node_modules
-GFLottery/*.log
-GFLottery/.nvm
+node_modules
+*.log
+.nvm
 
 # OS X
-GFLottery/.DS_Store
+.DS_Store
+ios/Example/Pods/
+ios/Example/Pods/Headers/
+ios/Example/Pods/Target Support Files/
+
+
+# Pods
+Pods/
