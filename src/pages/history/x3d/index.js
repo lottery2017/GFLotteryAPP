@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import {View, ListView, NativeModules, NativeEventEmitter} from 'react-native';
+import {View, ListView} from 'react-native';
 import {connect} from 'react-redux';
 import X3DCell from '../../../components/TabHistoryCells/x3dcell';
 import * as X3DListActions from '../../../actions/history/x3d';
@@ -48,10 +48,6 @@ class X3DHistoryList extends BaseComponent {
     }
 
     componentDidMount() {
-        this.myModuleEvt = new NativeEventEmitter(NativeModules.LDRNEventEmitter).addListener('LDRN_SET_AWARD_PUSH', () => {
-                this.props.getHeaderLabelString(this.state.gameEn);
-            },
-        );
         this.props.refreshAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
         this.props.getHeaderLabelString(this.state.gameEn);

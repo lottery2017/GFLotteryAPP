@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, ListView, NativeModules, NativeEventEmitter,FlatList} from 'react-native';
+import {View, ListView,FlatList} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import SSQCell from '../../../components/TabHistoryCells/ssqcell';
@@ -44,10 +44,6 @@ class SSQHistoryList extends BaseComponent {
     }
 
     componentDidMount() {
-        this.myModuleEvt = new NativeEventEmitter(NativeModules.LDRNEventEmitter).addListener('LDRN_SET_AWARD_PUSH', () => {
-                this.props.getHeaderLabelString(this.state.gameEn);
-            },
-        );
         this.props.refreshAction();
         this.props.getLatestTwentyAwards(this.state.gameEn,this.state.periodName);
         this.props.getHeaderLabelString(this.state.gameEn);
