@@ -8,6 +8,7 @@ build/
 .gradle
 local.properties
 *.iml
+*.keystore
 
 # Node
 node_modules
@@ -15,11 +16,6 @@ node_modules
 .nvm
 
 # OS X
-.DS_Store
-ios/Example/Pods/
-ios/Example/Pods/Headers/
-ios/Example/Pods/Target Support Files/
 
 
 # Pods
-Pods/
