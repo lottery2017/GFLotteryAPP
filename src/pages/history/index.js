@@ -105,10 +105,18 @@ class TabHistoryHall extends BaseComponent {
 
     renderContent() {
         if (this.props.gameEnArray && this.props.gameEnArray.length > 0) {
+            let dataBlob = [];
+            let i = 0;
+            this.props.gameEnArray.map(function (item) {
+                dataBlob.push({
+                    key: i,
+                    value: item,
+                });
+                i++;
+            });
             return (
                 <FlatList
-                    data={this.props.gameEnArray}
-                    keyExtractor={this._keyExtractor}
+                    data={dataBlob}
                     onRefresh={this.onRefresh}
                     refreshing={this.props.isRefreshing}
                     ItemSeparatorComponent={this._separator}
@@ -117,15 +125,12 @@ class TabHistoryHall extends BaseComponent {
         return null;
     }
 
-    _keyExtractor = (item, index) => item.index;
-
     renderItem({item, index}) {
-        let gameEn = item;
+        let gameEn = item.value;
         if (gameEn === 'ssq') {
             let periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <SSQCell
-                    key={index}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={periodName}
@@ -139,7 +144,6 @@ class TabHistoryHall extends BaseComponent {
             const periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <DLTCell
-                    key={index}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={periodName}
@@ -149,11 +153,10 @@ class TabHistoryHall extends BaseComponent {
                     }}
                     cellStyle="tabHall"
                 />);
-        } else if (gameEn === 'd11' || gameEn === 'jxd11' || gameEn === 'hljdd11' || gameEn === 'lnd11' || gameEn === 'gdd11' || gameEn === 'zjd11' || gameEn === 'hljd11' || gameEn === 'cqd11') {
+        } else if (gameEn === 'd11' || gameEn === 'jxd11' || gameEn === 'lnd11' || gameEn === 'gdd11' || gameEn === 'zjd11' || gameEn === 'hljd11' || gameEn === 'cqd11') {
             const periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <SYXWCell
-                    key={index}
                     gameEn={gameEn}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
@@ -166,7 +169,6 @@ class TabHistoryHall extends BaseComponent {
         } else if (gameEn === 'pl3') {
             return (
                 <PL3Cell
-                    key={index}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
@@ -175,7 +177,6 @@ class TabHistoryHall extends BaseComponent {
         } else if (gameEn === 'pl5') {
             return (
                 <PL5Cell
-                    key={index}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
@@ -184,7 +185,6 @@ class TabHistoryHall extends BaseComponent {
         } else if (gameEn === 'kl10') {
             return (
                 <KLSFCell
-                    key={index}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
@@ -193,7 +193,6 @@ class TabHistoryHall extends BaseComponent {
         } else if (gameEn === 'qxc') {
             return (
                 <QXCCell
-                    key={index}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
@@ -202,7 +201,6 @@ class TabHistoryHall extends BaseComponent {
         } else if (gameEn === 'qlc') {
             return (
                 <QLCCell
-                    key={index}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
@@ -212,7 +210,6 @@ class TabHistoryHall extends BaseComponent {
             const periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <SSCCell
-                    key={index}
                     gameEn={gameEn}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
@@ -226,7 +223,6 @@ class TabHistoryHall extends BaseComponent {
             const periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <X3DCell
-                    key={index}
                     extra={this.findDataByGameEn(gameEn).extra}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
@@ -241,7 +237,6 @@ class TabHistoryHall extends BaseComponent {
             const periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <KUAI3Cell
-                    key={index}
                     gameEn={gameEn}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
@@ -255,7 +250,6 @@ class TabHistoryHall extends BaseComponent {
             const periodName = this.findDataByGameEn(gameEn).periodName;
             return (
                 <SFCCell
-                    key={index}
                     gameEn={gameEn}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
@@ -268,7 +262,6 @@ class TabHistoryHall extends BaseComponent {
         } else if (gameEn === 'klpk') {
             return (
                 <KLPKCell
-                    key={index}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
@@ -277,7 +270,6 @@ class TabHistoryHall extends BaseComponent {
         } else if (gameEn === 'kl8') {
             return (
                 <KL8Cell
-                    key={index}
                     awardNo={this.findDataByGameEn(gameEn).awardNo}
                     awardTime={this.findDataByGameEn(gameEn).awardTime}
                     periodName={this.findDataByGameEn(gameEn).periodName}
@@ -286,7 +278,6 @@ class TabHistoryHall extends BaseComponent {
         } else if (gameEn === 'jczq') {
             return (
                 <JCZQCell
-                    key={index}
                     matchItem={this.props.awardInfoNew.jczq}
                     onPress={() => {
                         this.props.navigation.navigate('JCZQHistoryList', {gameEn: gameEn})
@@ -296,7 +287,6 @@ class TabHistoryHall extends BaseComponent {
         } else if (gameEn === 'jclq') {
             return (
                 <JCLQCell
-                    key={index}
                     matchItem={this.props.awardInfoNew.jclq}
                     onPress={() => {
                         this.props.navigation.navigate('JCLQHistoryList', {gameEn: gameEn})
@@ -306,21 +296,18 @@ class TabHistoryHall extends BaseComponent {
         } else if (gameEn === 'dcsfgg') {
             return (
                 <SFGGCell
-                    key={index}
                     matchItem={this.props.awardInfoNew.dcsfgg}
                     gameEn={gameEn}
                 />);
         } else if (gameEn === 'dcspf') {
             return (
                 <ZQDCCell
-                    key={index}
                     matchItem={this.props.awardInfoNew.dcspf}
                     gameEn={gameEn}
                 />);
         }
         return (
             <View
-                key={index}
                 style={{
                     height: 87,
                     flexDirection: 'row',

@@ -60,8 +60,8 @@ export default class PL3Cell extends BaseComponent {
               {this.state.awardNoArray.map((number, index) => {
                 const key = `${number} ${index}`;
                 return (
-                  <ImageBackground style={styles.ball} source={require('../../../images/redBall.png')}>
-                    <Text key={key} style={styles.text}>{number}</Text>
+                  <ImageBackground key={key} style={styles.ball} source={require('../../../images/redBall.png')}>
+                    <Text  style={styles.text}>{number}</Text>
                   </ImageBackground>
                 );
               })}

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, ListView,FlatList} from 'react-native';
+import {View, ListView, FlatList} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import SSQCell from '../../../components/TabHistoryCells/ssqcell';
@@ -10,6 +10,7 @@ import {LoadMoreStatus} from '../../../components/Views/LDRLScroll/LDLoadMoreRef
 import LDCPHistoryListView from '../../../components/Views/LDCPHistoryListView';
 import BaseComponent from '../../../components/Views/BaseComponent';
 import CommonStyles from "../../../styles/CommonStyles";
+import {FlatListLoadPull} from "../../../components/Views/LDRLScroll/FlatListLoadPull";
 
 class SSQHistoryList extends BaseComponent {
     static propTypes = {
@@ -37,37 +38,31 @@ class SSQHistoryList extends BaseComponent {
     constructor(props) {
         super(props);
         this.functionBindThis();
-        this.state=({
-            gameEn:this.props.navigation.state.params.gameEn,
-            periodName:this.props.navigation.state.params.periodName,
+        this.state = ({
+            gameEn: this.props.navigation.state.params.gameEn,
+            periodName: this.props.navigation.state.params.periodName,
         })
     }
 
     componentDidMount() {
         this.props.refreshAction();
-        this.props.getLatestTwentyAwards(this.state.gameEn,this.state.periodName);
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
         this.props.getHeaderLabelString(this.state.gameEn);
     }
 
     componentWillReceiveProps(nextProps) {
-       /* if (!nextProps.isRefreshing) {
-            this.listView.endRefresh();
-        }
         if (nextProps.historyItems.length > 0) {
-            this.listView.setLoadMoreStatus(LoadMoreStatus.idle);
-        }*/
+            this.flatList.setLoadMoreStatus(LoadMoreStatus.idle);
+        }
     }
 
     componentWillUnmount() {
-        if (this.myModuleEvt) {
-            this.myModuleEvt.remove();
-        }
         this.props.clearData();
     }
 
     // 下拉刷新
     onRefresh() {
-        this.props.getLatestTwentyAwards(this.state.gameEn,this.state.periodName);
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     // 上拉加载更多
@@ -87,9 +82,9 @@ class SSQHistoryList extends BaseComponent {
         this.renderRow = this.renderRow.bind(this);
     }
 
-    renderRow({item,index}) {
+    renderRow({item, index}) {
         return (
-            <SSQCell gameEn={this.state.gameEn} rowData={item} row={index}
+            <SSQCell gameEn={this.state.gameEn} rowData={item.value} row={index}
                      cellStyle="historyList"/>
         );
     }
@@ -99,22 +94,30 @@ class SSQHistoryList extends BaseComponent {
             <HistoryListHeader headerLabelString={this.props.headerLabelString}/>
         );
     }
-    _keyExtractor = (item, index) => item.index;
-    _separator = () => {
-        return (<View style={CommonStyles.lineStyle}/>)
-    }
+
     render() {
+        let dataBlob = [];
+        let i = 0;
+        this.props.historyItems.map(function (item) {
+            dataBlob.push({
+                key: i,
+                value: item,
+            });
+            i++;
+        });
         return (
             <View style={{flex: 1}}>
-                <FlatList
-                    data={this.props.historyItems}
-                    keyExtractor={this._keyExtractor}
+                <FlatListLoadPull
+                    ref={(ref) => {
+                        this.flatList = ref;
+                    }}
+                    data={dataBlob}
                     onRefresh={this.onRefresh}
                     onEndReached={this.onEndReached}
                     refreshing={this.props.isRefreshing}
+                    isShowLoadMore={this.props.hasNextPage}
+                    onEndReachedThreshold={0.2}
                     renderItem={this.renderRow.bind(this)}/>
-
-                    {/*isShowLoadMore={this.props.hasNextPage}*/}
                 <LotteryToolBar gameEn={this.state.gameEn}/>
             </View>
         );
@@ -137,7 +140,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(SSQListActions.refreshAction()),
-        getLatestTwentyAwards: (gameEn,periodName) => dispatch(SSQListActions.getRefreshDataAction(gameEn,periodName)),
+        getLatestTwentyAwards: (gameEn, periodName) => dispatch(SSQListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(SSQListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         getHeaderLabelString: gameEn => dispatch(SSQListActions.getHeaderLabelStringAction(gameEn)),
         clearData: () => dispatch(SSQListActions.clearDataAction()),
