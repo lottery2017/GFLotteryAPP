@@ -140,7 +140,6 @@ export default class LDRefreshScrollView extends ScrollView {
       return (
         <LDDefaultRefresh
           refresStatus={this.state.refresStatus}
-          scrollOffsetY={this.state.offsetY}
         />
       );
     }

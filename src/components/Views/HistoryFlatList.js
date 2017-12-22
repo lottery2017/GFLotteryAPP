@@ -2,16 +2,15 @@
  * Created by Ryan on 2017/12/19.
  */
 
-import React from 'react';
-import {
-    FlatList,
-    View,
-    NetInfo
-} from 'react-native';
-import {LDRefreshScrollView, LoadMoreStatus} from './LDLoadMoreRefresh';
-import LDDefaultLoadMore from '../LDRLScroll/LoadMore/LDDefaultLoadMore';
-import PropTypes from 'prop-types';
-import * as CommentConfig from "../../../utils/CommonConfig";
+import React from "react";
+import {FlatList, NetInfo, View} from "react-native";
+import {LoadMoreStatus} from "../Views/LDRLScroll/LDLoadMoreRefresh";
+import LDDefaultLoadMore from "./LDRLScroll/LoadMore/LDDefaultLoadMore";
+import PropTypes from "prop-types";
+import * as CommentConfig from "../../utils/CommonConfig";
+import RefreshFlatList, {ViewType} from "../../components/Views/PullRefreshFlatList";
+import LoadingView from "./LoadingView";
+
 /**
  *===============================================FlatListLoadPull=====================================
  */
@@ -19,7 +18,7 @@ export const LoadMoreTypes = {
     defaultType: 1,
 };
 
-export class FlatListLoadPull extends FlatList {
+export class HistoryFlatList extends FlatList {
     // 构造
     constructor(props) {
         super(props);
@@ -101,10 +100,18 @@ export class FlatListLoadPull extends FlatList {
 
     render() {
         return (
-            <FlatList
-                {...this.props}
-                ListFooterComponent={this.renderFooter}
-            />
+            <View style={{flex: 1}}>
+                {this.props.initLoading ?
+                    <LoadingView/> :
+                    <RefreshFlatList
+                        {...this.props}
+                        viewType={ViewType.ListView}
+                        initialNumToRender={20}
+                        onEndReachedThreshold={0.2}
+                        listFooterComponent={this.renderFooter}
+                    />
+                }
+            </View>
         );
     }
 

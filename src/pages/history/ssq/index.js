@@ -1,17 +1,13 @@
-import React from 'react';
-import {View, ListView, FlatList} from 'react-native';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import SSQCell from '../../../components/TabHistoryCells/ssqcell';
-import * as SSQListActions from '../../../actions/history/ssq';
-import HistoryListHeader from '../../../components/HistoryListHeader/HistoryListHeader';
-import LotteryToolBar from '../../../components/Views/LotteryToolBar';
-import {LoadMoreStatus} from '../../../components/Views/LDRLScroll/LDLoadMoreRefresh';
-import LDCPHistoryListView from '../../../components/Views/LDCPHistoryListView';
-import BaseComponent from '../../../components/Views/BaseComponent';
-import CommonStyles from "../../../styles/CommonStyles";
-import {FlatListLoadPull} from "../../../components/Views/LDRLScroll/FlatListLoadPull";
-
+import React from "react";
+import {View} from "react-native";
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
+import SSQCell from "../../../components/TabHistoryCells/ssqcell";
+import * as SSQListActions from "../../../actions/history/ssq";
+import LotteryToolBar from "../../../components/Views/LotteryToolBar";
+import {LoadMoreStatus} from "../../../components/Views/LDRLScroll/LDLoadMoreRefresh";
+import BaseComponent from "../../../components/Views/BaseComponent";
+import {HistoryFlatList} from "../../../components/Views/HistoryFlatList";
 class SSQHistoryList extends BaseComponent {
     static propTypes = {
         gameEn: PropTypes.string,
@@ -41,6 +37,7 @@ class SSQHistoryList extends BaseComponent {
         this.state = ({
             gameEn: this.props.navigation.state.params.gameEn,
             periodName: this.props.navigation.state.params.periodName,
+            refreshing: false,
         })
     }
 
@@ -51,6 +48,10 @@ class SSQHistoryList extends BaseComponent {
     }
 
     componentWillReceiveProps(nextProps) {
+        if (!nextProps.isRefreshing) {
+
+            //this.setState({isRefresh: false});
+        }
         if (nextProps.historyItems.length > 0) {
             this.flatList.setLoadMoreStatus(LoadMoreStatus.idle);
         }
@@ -62,6 +63,7 @@ class SSQHistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
+        this.setState({isRefresh: true});
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
@@ -77,21 +79,13 @@ class SSQHistoryList extends BaseComponent {
 
     functionBindThis() {
         this.onEndReached = this.onEndReached.bind(this);
-        this.renderHeader = this.renderHeader.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
-        this.renderRow = this.renderRow.bind(this);
     }
 
     renderRow({item, index}) {
         return (
             <SSQCell gameEn={this.state.gameEn} rowData={item.value} row={index}
                      cellStyle="historyList"/>
-        );
-    }
-
-    renderHeader() {
-        return (
-            <HistoryListHeader headerLabelString={this.props.headerLabelString}/>
         );
     }
 
@@ -106,18 +100,20 @@ class SSQHistoryList extends BaseComponent {
             i++;
         });
         return (
-            <View style={{flex: 1}}>
-                <FlatListLoadPull
-                    ref={(ref) => {
-                        this.flatList = ref;
-                    }}
-                    data={dataBlob}
-                    onRefresh={this.onRefresh}
-                    onEndReached={this.onEndReached}
-                    refreshing={this.props.isRefreshing}
-                    isShowLoadMore={this.props.hasNextPage}
-                    onEndReachedThreshold={0.2}
-                    renderItem={this.renderRow.bind(this)}/>
+            <View style={{flex: 1,backgroundColor:'#f1f1f1'}}>
+                <View style={{flex: 1}}>
+                    <HistoryFlatList
+                        ref={(ref) => {
+                            this.flatList = ref;
+                        }}
+                        data={dataBlob}
+                        initLoading={this.props.isRefreshing}
+                        onRefreshFun={this.onRefresh}
+                        onEndReached={this.onEndReached}
+                        isRefresh={this.state.isRefresh}
+                        renderItem={this.renderRow.bind(this)}
+                    />
+                </View>
                 <LotteryToolBar gameEn={this.state.gameEn}/>
             </View>
         );

@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { PureComponent ,Component} from 'react';
 import Immutable from 'immutable';
 
 export default class BaseComponent extends Component {
