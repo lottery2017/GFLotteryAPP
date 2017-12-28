@@ -3,6 +3,7 @@ import * as types from '../../../actions/ActionTypes';
 
 const MAX_SAVE_PERIODS = 200; // 展示的最多条数
 const defaultUserState = Immutable.Map({
+
 });
 
 export default function DLTHistoryList(state = defaultUserState, action) {
@@ -11,21 +12,27 @@ export default function DLTHistoryList(state = defaultUserState, action) {
             return Immutable.fromJS({
                 isRefreshing: true,
             });
+        case types.DLTHISTORYLIST_LOADING:
+            return Immutable.fromJS({
+                isLoading: true,
+            });
         case types.DLTHISTORYLIST_REFRESHLIST:
             return state.merge(Immutable.fromJS({
-                isRefreshing: false,
                 historyItems: action.payload.latestTwentyItems,
                 hasNextPage: action.payload.latestTwentyItems.length >= 20,
                 isEmpty: action.payload.latestTwentyItems.length <= 0,
+                isRefreshing: false,
+                isLoading: false,
             }));
         case types.DLTHISTORYLIST_GETNEXTPAGE:
             return state.merge(Immutable.fromJS({
-                isRefreshing: false,
                 hasNextPage: action.payload.nextPageItems.length === 10 &&
                 state.get('historyItems').size + action.payload.nextPageItems.length < MAX_SAVE_PERIODS,
                 historyItems: action.payload.nextPageItems.length > 0 ?
                     state.get('historyItems').concat(Immutable.fromJS(action.payload.nextPageItems)) :
                     state.get('historyItems'),
+                isRefreshing: false,
+                isLoading: false,
             }));
         case types.DLTHISTORYLIST_HEADERDISPLAY:
             return state.merge(Immutable.fromJS({

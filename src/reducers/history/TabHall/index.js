@@ -2,10 +2,11 @@ import Immutable from 'immutable';
 import * as types from '../../../actions/ActionTypes';
 
 const defaultUserState = Immutable.fromJS({
-    isRefreshing: false,
+    initLoading: false,
     awardInfo: [],
     awardInfoNew: {},
     awardRankArray: [],
+    isRefreshing:false,
 });
 
 export default function tabHistoryHall(state = defaultUserState, action) {
@@ -14,13 +15,18 @@ export default function tabHistoryHall(state = defaultUserState, action) {
             return state.merge({
                 isRefreshing: true,
             });
+        case types.TABHISTORYHALLPAGE_LOADING:
+            return state.merge({
+                initLoading: true,
+            });
         case types.TABHISTORYHALLPAGE_GETAWARDHOME:
             return state.merge({
                 awardInfo: action.payload.awardInfo,
                 awardInfoNew: action.payload.awardInfoNew,
                 gameEnArray: action.payload.gameEnArray,
                 awardRankArray: action.payload.awardRankArray,
-                isRefreshing: false,
+                initLoading: false,
+                isRefreshing:false,
             });
         default:
             return state;

@@ -1,19 +1,17 @@
 /**
  * 大乐透彩种二级页面
  */
-import React from 'react';
-import PropTypes from 'prop-types';
-import {View, ListView} from 'react-native';
-import {connect} from 'react-redux';
-import X3DCell from '../../../components/TabHistoryCells/x3dcell';
-import * as X3DListActions from '../../../actions/history/x3d';
-import HistoryListHeader from '../../../components/HistoryListHeader/HistoryListHeader';
-import LotteryToolBar from '../../../components/Views/LotteryToolBar';
-import CommonNaviBar from '../../../components/Views/CommonNaviBar';
-import {LoadMoreStatus} from '../../../components/Views/LDRLScroll/LDLoadMoreRefresh';
-import LDCPHistoryListView from '../../../components/Views/LDCPHistoryListView';
-import BaseComponent from '../../../components/Views/BaseComponent';
-import * as helper from '../../../utils/GlobalHelper';
+import React from "react";
+import PropTypes from "prop-types";
+import {View} from "react-native";
+import {connect} from "react-redux";
+import X3DCell from "../../../components/TabHistoryCells/x3dcell";
+import * as X3DListActions from "../../../actions/history/x3d";
+import HistoryListHeader from "../../../components/HistoryListHeader/HistoryListHeader";
+import LotteryToolBar from "../../../components/Views/LotteryToolBar";
+import {LoadMoreStatus} from "../../../components/Views/GFRefresh/GFScroll/index";
+import BaseComponent from "../../../components/Views/BaseComponent";
+import {GFRefreshFlatList} from "../../../components/Views/GFRefresh/GFRefreshFlatList";
 
 class X3DHistoryList extends BaseComponent {
     static propTypes = {
@@ -55,10 +53,10 @@ class X3DHistoryList extends BaseComponent {
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.isRefreshing) {
-            this.listView.endRefresh();
+            this.setState({isRefresh: false});
         }
         if (nextProps.historyItems.length > 0) {
-            this.listView.setLoadMoreStatus(LoadMoreStatus.idle);
+            this.flatList.setLoadMoreStatus(LoadMoreStatus.idle);
         }
     }
 
@@ -108,26 +106,31 @@ class X3DHistoryList extends BaseComponent {
     }
 
     render() {
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        const {historyItems} = this.props;
+        let dataBlob = [];
+        let i = 0;
+        this.props.historyItems.map(function (item) {
+            dataBlob.push({
+                key: i,
+                value: item,
+            });
+            i++;
+        });
         return (
-            <View style={{flex: 1}}>
-                <LDCPHistoryListView
-                    ref={(ref) => {
-                        this.listView = ref;
-                    }}
-                    renderRow={this.renderRow}
-                    dataSource={ds.cloneWithRows(historyItems)}
-                    automaticallyAdjustContentInsets={false}
-                    horizontal={false}
-                    onRefresh={this.onRefresh}
-                    onLoadMore={this.onEndReached}
-                    enableEmptySections
-                    isShowLoadMore={this.props.hasNextPage}
-                    renderHeader={this.renderHeader}
-                    empty={this.props.isEmpty}
-                    isRefreshing={this.props.isRefreshing}
-                />
+            <View style={{flex: 1, backgroundColor: '#f1f1f1'}}>
+                <View style={{flex: 1}}>
+                    <GFRefreshFlatList
+                        ref={(ref) => {
+                            this.flatList = ref;
+                        }}
+                        data={dataBlob}
+                        initLoading={this.props.isRefreshing}
+                        onRefreshFun={this.onRefresh}
+                        onEndReached={this.onEndReached}
+                        isRefresh={this.state.isRefresh}
+                        renderItem={this.renderRow.bind(this)}
+                        isShowLoadMore={true}
+                    />
+                </View>
                 <LotteryToolBar gameEn={this.state.gameEn}/>
             </View>
         );

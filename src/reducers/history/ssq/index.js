@@ -9,6 +9,7 @@ const defaultUserState = Immutable.fromJS({
     headerLabelString: '',
     hasNextPage: true,
     isEmpty: false,
+    isLoading:false,
 });
 
 export default function SSQHistoryList(state = defaultUserState, action) {
@@ -17,9 +18,14 @@ export default function SSQHistoryList(state = defaultUserState, action) {
             return state.merge({
                 isRefreshing: true,
             });
+        case types.SSQHISTORYLIST_LOADING:
+            return state.merge({
+                isLoading: true,
+            });
         case types.SSQHISTORYLIST_REFRESHLIST:
             return state.merge({
                 isRefreshing: false,
+                isLoading: false,
                 historyItems: action.payload.latestTwentyItems,
                 hasNextPage: action.payload.latestTwentyItems.length >= 20,
                 isEmpty: action.payload.latestTwentyItems.length <= 0,
@@ -27,6 +33,7 @@ export default function SSQHistoryList(state = defaultUserState, action) {
         case types.SSQHISTORYLIST_GETNEXTPAGE:
             return state.merge({
                 isRefreshing: false,
+                isLoading: false,
                 hasNextPage: action.payload.nextPageItems.length === 10 &&
                 state.get('historyItems').size + action.payload.nextPageItems.length < MAX_SAVE_PERIODS,
                 historyItems: action.payload.nextPageItems.length > 0 ?

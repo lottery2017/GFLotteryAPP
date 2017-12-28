@@ -1,29 +1,28 @@
 /**
  * 大乐透彩种二级页面
  */
-import React from 'react';
-import PropTypes from 'prop-types';
-import {View, ListView} from 'react-native';
-import {connect} from 'react-redux';
-import DLTCell from '../../../components/TabHistoryCells/dltcell';
-import * as DLTListActions from '../../../actions/history/dlt';
-import HistoryListHeader from '../../../components/HistoryListHeader/HistoryListHeader';
-import LotteryToolBar from '../../../components/Views/LotteryToolBar';
-import CommonNaviBar from '../../../components/Views/CommonNaviBar';
-import {LoadMoreStatus} from '../../../components/Views/LDRLScroll/LDLoadMoreRefresh';
-import LDCPHistoryListView from '../../../components/Views/LDCPHistoryListView';
-import BaseComponent from '../../../components/Views/BaseComponent';
-import * as helper from '../../../utils/GlobalHelper';
-
+import React from "react";
+import PropTypes from "prop-types";
+import {ListView, View} from "react-native";
+import {connect} from "react-redux";
+import DLTCell from "../../../components/TabHistoryCells/dltcell";
+import * as DLTListActions from "../../../actions/history/dlt";
+import HistoryListHeader from "../../../components/HistoryListHeader/HistoryListHeader";
+import LotteryToolBar from "../../../components/Views/LotteryToolBar";
+import {LoadMoreStatus} from "../../../components/Views/GFRefresh/GFScroll/index";
+import BaseComponent from "../../../components/Views/BaseComponent";
+import {GFRefreshFlatList} from "../../../components/Views/GFRefresh/GFRefreshFlatList";
 class DLTHistoryList extends BaseComponent {
     static propTypes = {
         gameEn: PropTypes.string,
         isRefreshing: PropTypes.bool,
+        isLoading: PropTypes.bool,
         historyItems: PropTypes.array,
         hasNextPage: PropTypes.bool,
         headerLabelString: PropTypes.string,
         isEmpty: PropTypes.bool,
         refreshAction: PropTypes.func.isRequired,
+        loadingAction: PropTypes.func.isRequired,
         getLatestTwentyAwards: PropTypes.func.isRequired,
         getHeaderLabelString: PropTypes.func.isRequired,
         clearData: PropTypes.func.isRequired,
@@ -32,6 +31,7 @@ class DLTHistoryList extends BaseComponent {
 
     static defaultProps = {
         isRefreshing: false,
+        isLoading: false,
         historyItems: [],
         hasNextPage: false,
         headerLabelString: '',
@@ -43,42 +43,40 @@ class DLTHistoryList extends BaseComponent {
         this.functionBindThis();
         this.state = {
             gameEn: this.props.navigation.state.params.gameEn,
-            periodName:this.props.navigation.state.params.periodName,
+            periodName: this.props.navigation.state.params.periodName,
         }
     }
 
     componentDidMount() {
-        this.props.refreshAction();
-        this.props.getLatestTwentyAwards(this.state.gameEn,this.state.periodName);
+        this.props.loadingAction();
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
         this.props.getHeaderLabelString(this.state.gameEn);
     }
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.isRefreshing) {
-            this.listView.endRefresh();
         }
         if (nextProps.historyItems.length > 0) {
-            this.listView.setLoadMoreStatus(LoadMoreStatus.idle);
+            this.flatList.setLoadMoreStatus(LoadMoreStatus.idle);
         }
     }
 
     componentWillUnmount() {
         this.props.clearData();
-        if (this.myModuleEvt) {
-            this.myModuleEvt.remove();
-        }
     }
 
     // 下拉刷新
     onRefresh() {
-        this.props.getLatestTwentyAwards(this.state.gameEn,this.state.periodName);
+        this.props.refreshAction();
+        this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     // 上拉加载更多
     onEndReached() {
         if (this.props.hasNextPage && this.props.historyItems && this.props.historyItems.length !== 0) {
             this.props.getNextPageAwards(
-                this.state.gameEn, this.props.historyItems[this.props.historyItems.length - 1].periodName,
+                this.state.gameEn,
+                this.props.historyItems[this.props.historyItems.length - 1].periodName,
             );
         }
     }
@@ -90,12 +88,12 @@ class DLTHistoryList extends BaseComponent {
         this.onEndReached = this.onEndReached.bind(this);
     }
 
-    renderRow(rowData, sectionID, rowID) {
+    renderRow({item, index}) {
         return (
             <DLTCell
                 gameEn={this.state.gameEn}
-                rowData={rowData}
-                row={rowID}
+                rowData={item.value}
+                row={index}
                 cellStyle="historyList"
             />
         );
@@ -108,26 +106,31 @@ class DLTHistoryList extends BaseComponent {
     }
 
     render() {
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        const {historyItems} = this.props;
+        let dataBlob = [];
+        let i = 0;
+        this.props.historyItems.map(function (item) {
+            dataBlob.push({
+                key: i,
+                value: item,
+            });
+            i++;
+        });
         return (
-            <View style={{flex: 1}}>
-                <LDCPHistoryListView
-                    ref={(ref) => {
-                        this.listView = ref;
-                    }}
-                    renderRow={this.renderRow}
-                    dataSource={ds.cloneWithRows(historyItems)}
-                    automaticallyAdjustContentInsets={false}
-                    horizontal={false}
-                    onRefresh={this.onRefresh}
-                    onLoadMore={this.onEndReached}
-                    enableEmptySections
-                    isShowLoadMore={this.props.hasNextPage}
-                    renderHeader={this.renderHeader}
-                    empty={this.props.isEmpty}
-                    isRefreshing={this.props.isRefreshing}
-                />
+            <View style={{flex: 1, backgroundColor: '#f1f1f1'}}>
+                <View style={{flex: 1}}>
+                    <GFRefreshFlatList
+                        ref={(ref) => {
+                            this.flatList = ref;
+                        }}
+                        data={dataBlob}
+                        initLoading={this.props.isLoading}
+                        onRefreshFun={this.onRefresh}
+                        onEndReached={this.onEndReached}
+                        isRefresh={this.props.isRefreshing}
+                        renderItem={this.renderRow.bind(this)}
+                        isShowLoadMore={true}
+                    />
+                </View>
                 <LotteryToolBar gameEn={this.state.gameEn}/>
             </View>
         );
@@ -139,6 +142,7 @@ function mapStateToProps(store) {
     const DLTHistoryListReducer = store.DLTHistoryListReducer.toJS();
     return {
         isRefreshing: DLTHistoryListReducer.isRefreshing,
+        isLoading: DLTHistoryListReducer.isLoading,
         historyItems: DLTHistoryListReducer.historyItems,
         headerLabelString: DLTHistoryListReducer.headerLabelString,
         hasNextPage: DLTHistoryListReducer.hasNextPage,
@@ -150,7 +154,8 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(DLTListActions.refreshAction()),
-        getLatestTwentyAwards: (gameEn,periodName) => dispatch(DLTListActions.getRefreshDataAction(gameEn,periodName)),
+        loadingAction: () => dispatch(DLTListActions.loadingAction()),
+        getLatestTwentyAwards: (gameEn, periodName) => dispatch(DLTListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(DLTListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         getHeaderLabelString: gameEn => dispatch(DLTListActions.getHeaderLabelStringAction(gameEn)),
         clearData: () => dispatch(DLTListActions.clearDataAction()),

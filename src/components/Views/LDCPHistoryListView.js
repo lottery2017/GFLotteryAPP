@@ -3,8 +3,7 @@ import {
     NetInfo,
     ListView,
 } from 'react-native';
-import {LDRLListView, LoadMoreStatus} from '../Views/LDRLScroll/LDLoadMoreRefresh';
-import EmptyHintView from '../Views/EmptyHintView';
+import {LDRLListView, LoadMoreStatus} from './GFRefresh/GFScroll/index';
 import LoadingView from '../Views/LoadingView';
 import PropTypes from 'prop-types';
 import * as CommentConfig from "../../utils/CommonConfig";
@@ -113,11 +112,7 @@ export default class LDCPHistoryListView extends LDRLListView {
             return (<LoadingView height={this.state.loadingViewHeight}/>
             );
         }
-        return (
-            <EmptyHintView
-                height={this.state.emptyHintViewHeight}
-            />
-        );
+
     }
     onLayout(event){
         const layout = event.nativeEvent.layout;

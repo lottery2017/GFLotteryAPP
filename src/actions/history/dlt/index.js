@@ -5,6 +5,7 @@ import * as DLTHistoryListService from '../../../service/history/dlt';
 import * as helper from '../../../components/HistoryListHeader/helper';
 
 export const refreshAction = createAction(types.DLTHISTORYLIST_REFRESHING);
+export const loadingAction = createAction(types.DLTHISTORYLIST_LOADING);
 export const clearDataAction = createAction(types.DLTHISTORYLIST_CLEARDATA);// 清空数据
 
 // 获得最近的20条数据

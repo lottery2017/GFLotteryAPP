@@ -5,6 +5,7 @@ import * as SSQHistoryListService from '../../../service/history/ssq';
 import * as helper from '../../../components/HistoryListHeader/helper';
 
 export const refreshAction = createAction(types.SSQHISTORYLIST_REFRESHING);
+export const loadingAction = createAction(types.SSQHISTORYLIST_LOADING);
 export const clearDataAction = createAction(types.SSQHISTORYLIST_CLEARDATA);// 清空数据
 
 // 获得最近的20条数据

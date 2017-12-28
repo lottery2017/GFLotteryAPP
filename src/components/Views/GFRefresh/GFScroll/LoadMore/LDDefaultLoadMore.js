@@ -6,8 +6,8 @@ import {
   Text,
   Image,
 } from 'react-native';
-import { LoadMoreStatus } from '../LDLoadMoreRefresh';
-import BaseComponent from '../../BaseComponent';
+import { LoadMoreStatus } from '../index';
+import BaseComponent from '../../../BaseComponent';
 import PropTypes from 'prop-types';
 const styles = StyleSheet.create({
   appendLoading: {

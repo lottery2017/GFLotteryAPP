@@ -1,15 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {View, ListView} from 'react-native';
-import {connect} from 'react-redux';
-import K3Cell from '../../../components/TabHistoryCells/kuai3cell';
-import * as K3ListActions from '../../../actions/history/k3';
-import LotteryToolBar from '../../../components/Views/LotteryToolBar';
-import CommonNaviBar from '../../../components/Views/CommonNaviBar';
-import {LoadMoreStatus} from '../../../components/Views/LDRLScroll/LDLoadMoreRefresh';
-import LDCPHistoryListView from '../../../components/Views/LDCPHistoryListView';
-import * as GlobalHelper from '../../../utils/GlobalHelper';
-import BaseComponent from '../../../components/Views/BaseComponent';
+import React from "react";
+import PropTypes from "prop-types";
+import {View} from "react-native";
+import {connect} from "react-redux";
+import K3Cell from "../../../components/TabHistoryCells/kuai3cell";
+import * as K3ListActions from "../../../actions/history/k3";
+import LotteryToolBar from "../../../components/Views/LotteryToolBar";
+import {LoadMoreStatus} from "../../../components/Views/GFRefresh/GFScroll/index";
+import * as GlobalHelper from "../../../utils/GlobalHelper";
+import BaseComponent from "../../../components/Views/BaseComponent";
+import {GFRefreshFlatList} from "../../../components/Views/GFRefresh/GFRefreshFlatList";
 
 class K3HistoryList extends BaseComponent {
     static navigationOptions = ({navigation}) => ({
@@ -50,10 +49,10 @@ class K3HistoryList extends BaseComponent {
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.isRefreshing) {
-            this.listView.endRefresh();
+            this.setState({isRefresh: false});
         }
         if (nextProps.historyItems.length > 0) {
-            this.listView.setLoadMoreStatus(LoadMoreStatus.idle);
+            this.flatList.setLoadMoreStatus(LoadMoreStatus.idle);
         }
     }
 
@@ -87,28 +86,31 @@ class K3HistoryList extends BaseComponent {
     }
 
     render() {
-        const ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2,
+        let dataBlob = [];
+        let i = 0;
+        this.props.historyItems.map(function (item) {
+            dataBlob.push({
+                key: i,
+                value: item,
+            });
+            i++;
         });
-        const {historyItems} = this.props;
         return (
-            <View style={{flex: 1}}>
-                <LDCPHistoryListView
-                    ref={(ref) => {
-                        this.listView = ref;
-                    }}
-                    renderRow={this.renderRow}
-                    dataSource={ds.cloneWithRows(historyItems)}
-                    automaticallyAdjustContentInsets={false}
-                    horizontal={false}
-                    onRefresh={this.onRefresh}
-                    onLoadMore={this.onEndReached}
-                    isShowLoadMore={this.props.hasNextPage}
-                    enableEmptySections
-                    renderHeader={this.renderHeader}
-                    empty={this.props.isEmpty}
-                    isRefreshing={this.props.isRefreshing}
-                />
+            <View style={{flex: 1, backgroundColor: '#f1f1f1'}}>
+                <View style={{flex: 1}}>
+                    <GFRefreshFlatList
+                        ref={(ref) => {
+                            this.flatList = ref;
+                        }}
+                        data={dataBlob}
+                        initLoading={this.props.isRefreshing}
+                        onRefreshFun={this.onRefresh}
+                        onEndReached={this.onEndReached}
+                        isRefresh={this.state.isRefresh}
+                        renderItem={this.renderRow.bind(this)}
+                        isShowLoadMore={true}
+                    />
+                </View>
                 <LotteryToolBar gameEn={this.state.gameEn}/>
             </View>
         );

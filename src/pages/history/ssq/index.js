@@ -5,13 +5,14 @@ import PropTypes from "prop-types";
 import SSQCell from "../../../components/TabHistoryCells/ssqcell";
 import * as SSQListActions from "../../../actions/history/ssq";
 import LotteryToolBar from "../../../components/Views/LotteryToolBar";
-import {LoadMoreStatus} from "../../../components/Views/LDRLScroll/LDLoadMoreRefresh";
+import {LoadMoreStatus} from "../../../components/Views/GFRefresh/GFScroll/index";
 import BaseComponent from "../../../components/Views/BaseComponent";
-import {HistoryFlatList} from "../../../components/Views/HistoryFlatList";
+import {GFRefreshFlatList} from "../../../components/Views/GFRefresh/GFRefreshFlatList";
 class SSQHistoryList extends BaseComponent {
     static propTypes = {
         gameEn: PropTypes.string,
         isRefreshing: PropTypes.bool,
+        isLoading: PropTypes.bool,
         historyItems: PropTypes.array,
         hasNextPage: PropTypes.bool,
         isEmpty: PropTypes.bool,
@@ -21,10 +22,12 @@ class SSQHistoryList extends BaseComponent {
         getHeaderLabelString: PropTypes.func.isRequired,
         clearData: PropTypes.func.isRequired,
         getNextPageAwards: PropTypes.func.isRequired,
+        loadingAction:PropTypes.func.isRequired,
     };
 
     static defaultProps = {
         isRefreshing: false,
+        isLoading: false,
         historyItems: [],
         hasNextPage: false,
         headerLabelString: '',
@@ -37,20 +40,17 @@ class SSQHistoryList extends BaseComponent {
         this.state = ({
             gameEn: this.props.navigation.state.params.gameEn,
             periodName: this.props.navigation.state.params.periodName,
-            refreshing: false,
         })
     }
 
     componentDidMount() {
-        this.props.refreshAction();
+        this.props.loadingAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
         this.props.getHeaderLabelString(this.state.gameEn);
     }
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.isRefreshing) {
-
-            //this.setState({isRefresh: false});
         }
         if (nextProps.historyItems.length > 0) {
             this.flatList.setLoadMoreStatus(LoadMoreStatus.idle);
@@ -63,7 +63,7 @@ class SSQHistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
-        this.setState({isRefresh: true});
+        this.props.refreshAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
@@ -84,8 +84,11 @@ class SSQHistoryList extends BaseComponent {
 
     renderRow({item, index}) {
         return (
-            <SSQCell gameEn={this.state.gameEn} rowData={item.value} row={index}
-                     cellStyle="historyList"/>
+            <SSQCell
+                gameEn={this.state.gameEn}
+                rowData={item.value}
+                row={index}
+                cellStyle="historyList"/>
         );
     }
 
@@ -100,18 +103,19 @@ class SSQHistoryList extends BaseComponent {
             i++;
         });
         return (
-            <View style={{flex: 1,backgroundColor:'#f1f1f1'}}>
+            <View style={{flex: 1, backgroundColor: '#f1f1f1'}}>
                 <View style={{flex: 1}}>
-                    <HistoryFlatList
+                    <GFRefreshFlatList
                         ref={(ref) => {
                             this.flatList = ref;
                         }}
                         data={dataBlob}
-                        initLoading={this.props.isRefreshing}
+                        initLoading={this.props.isLoading}
                         onRefreshFun={this.onRefresh}
                         onEndReached={this.onEndReached}
-                        isRefresh={this.state.isRefresh}
+                        isRefresh={this.props.isRefreshing}
                         renderItem={this.renderRow.bind(this)}
+                        isShowLoadMore={true}
                     />
                 </View>
                 <LotteryToolBar gameEn={this.state.gameEn}/>
@@ -125,6 +129,7 @@ function mapStateToProps(store) {
     const SSQHistoryListReducer = store.SSQHistoryListReducer.toJS();
     return {
         isRefreshing: SSQHistoryListReducer.isRefreshing,
+        isLoading: SSQHistoryListReducer.isLoading,
         historyItems: SSQHistoryListReducer.historyItems,
         headerLabelString: SSQHistoryListReducer.headerLabelString,
         hasNextPage: SSQHistoryListReducer.hasNextPage,
@@ -136,6 +141,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(SSQListActions.refreshAction()),
+        loadingAction: () => dispatch(SSQListActions.loadingAction()),
         getLatestTwentyAwards: (gameEn, periodName) => dispatch(SSQListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(SSQListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         getHeaderLabelString: gameEn => dispatch(SSQListActions.getHeaderLabelStringAction(gameEn)),

@@ -9,6 +9,7 @@ import * as lotteryURL from "../../../service/lotteryURL";
 import * as TYPES from "./type";
 
 export const refreshAction = createAction(types.TABHISTORYHALLPAGE_REFRESHING);
+export const loadingAction = createAction(types.TABHISTORYHALLPAGE_LOADING);
 
 async function getGameEnArray() {
     const gameEns = CommentConfig.gameEns;

@@ -9,7 +9,6 @@ import CommonNaviBar from '../../../components/Views/CommonNaviBar';
 import JCHistoryListBarDateView from '../../../components/Views/JCHistoryListBarDateView';
 import DatePickerView from '../../../components/Views/DatePickerView';
 import JCListSectionHeader from '../../../components/Views/JCListSectionHeader';
-import LDCPHistoryListView from '../../../components/Views/LDCPHistoryListView';
 import * as GlobalHelper from '../../../utils/GlobalHelper';
 import BaseComponent from '../../../components/Views/BaseComponent';
 import PropTypes from 'prop-types';
@@ -153,7 +152,7 @@ class JCZQHistoryList extends BaseComponent {
 
         return (
             <View style={{flex: 1}}>
-                <CommonNaviBar middleTitle="竞彩足球" rightView={<JCHistoryListBarDateView />}
+              {/*  <CommonNaviBar middleTitle="竞彩足球" rightView={<JCHistoryListBarDateView />}
                                rightAction={Platform.OS === 'android' ? showAndDatePicker : this.props.barDateClicked}/>
                 <OddsHintView />
 
@@ -180,7 +179,7 @@ class JCZQHistoryList extends BaseComponent {
                     />
                         :
                         <LotteryToolBar gameEn={this.state.gameEn}/>
-                }
+                }*/}
             </View>
         );
     }

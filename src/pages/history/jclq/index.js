@@ -11,7 +11,6 @@ import JCHistoryListBarDateView from '../../../components/Views/JCHistoryListBar
 import DatePickerView from '../../../components/Views/DatePickerView';
 import JCLIistSectionHeader from '../../../components/Views/JCListSectionHeader';
 import * as GlobalHelper from '../../../utils/GlobalHelper';
-import LDCPHistoryListView from '../../../components/Views/LDCPHistoryListView';
 import BaseComponent from '../../../components/Views/BaseComponent';
 
 class JCLQHistoryList extends BaseComponent {
@@ -153,7 +152,7 @@ class JCLQHistoryList extends BaseComponent {
       GlobalHelper.handleSectionListViewData(this.props.lastest3DaysItems);
     return (
       <View style={{ flex: 1 }}>
-        <CommonNaviBar middleTitle="竞彩篮球" rightView={<JCHistoryListBarDateView />} rightAction={Platform.OS === 'android' ? showAndDatePicker : this.props.barDateClicked} />
+     {/*   <CommonNaviBar middleTitle="竞彩篮球" rightView={<JCHistoryListBarDateView />} rightAction={Platform.OS === 'android' ? showAndDatePicker : this.props.barDateClicked} />
         <OddsHintView />
         <LDCPHistoryListView
           ref={(ref) => { this.listView = ref; }}
@@ -175,7 +174,7 @@ class JCLQHistoryList extends BaseComponent {
           />
             :
           <LotteryToolBar gameEn={this.state.gameEn} />
-        }
+        }*/}
       </View>
     );
   }

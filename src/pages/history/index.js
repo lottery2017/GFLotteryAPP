@@ -26,7 +26,7 @@ import BaseComponent from "../../components/Views/BaseComponent";
 import HallNoticeView from "../../components/Views/HallNoticeView";
 import PropTypes from "prop-types";
 import TabBarItem from "../../components/TabBarItem/TabBarItem";
-import CommonStyles from "../../styles/CommonStyles";
+import {GFRefreshFlatList} from "../../components/Views/GFRefresh/GFRefreshFlatList";
 class TabHistoryHall extends BaseComponent {
     static navigationOptions = {
         tabBarIcon: ({focused, tintColor}) => (
@@ -41,6 +41,7 @@ class TabHistoryHall extends BaseComponent {
     };
 
     static propTypes = {
+        initLoading: PropTypes.bool,
         isRefreshing: PropTypes.bool,
         awardInfo: PropTypes.array,
         gameEnArray: PropTypes.array,
@@ -48,9 +49,11 @@ class TabHistoryHall extends BaseComponent {
         refreshAction: PropTypes.func.isRequired,
         getAwardHomeAction: PropTypes.func.isRequired,
         getRefreshDataAction: PropTypes.func.isRequired,
+        loadingAction: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
+        initLoading: false,
         isRefreshing: false,
         awardInfo: [],
         gameEnArray: [],
@@ -60,19 +63,24 @@ class TabHistoryHall extends BaseComponent {
     constructor(props) {
         super(props);
         this.onRefresh = this.onRefresh.bind(this);
+        this.state = {
+            isRefresh: false
+        }
     }
 
     componentDidMount() {
-        this.props.refreshAction();
+        this.props.loadingAction();
         this.props.getAwardHomeAction();
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!nextProps.isRefreshing) {
+        if (!nextProps.initLoading) {
+
         }
     }
 
     onRefresh() {
+        this.props.refreshAction();
         this.props.getRefreshDataAction();
     }
 
@@ -99,10 +107,6 @@ class TabHistoryHall extends BaseComponent {
         return null;
     }
 
-    _separator = () => {
-        return (<View style={CommonStyles.lineStyle}/>)
-    }
-
     renderContent() {
         if (this.props.gameEnArray && this.props.gameEnArray.length > 0) {
             let dataBlob = [];
@@ -115,12 +119,16 @@ class TabHistoryHall extends BaseComponent {
                 i++;
             });
             return (
-                <FlatList
-                    data={dataBlob}
-                    onRefresh={this.onRefresh}
-                    refreshing={this.props.isRefreshing}
-                    ItemSeparatorComponent={this._separator}
-                    renderItem={this.renderItem.bind(this)}/>)
+                <View style={{flex: 1}}>
+                    <GFRefreshFlatList
+                        data={dataBlob}
+                        initLoading={this.props.initLoading}
+                        onRefreshFun={this.onRefresh}
+                        isRefresh={this.props.isRefreshing}
+                        renderItem={this.renderItem.bind(this)}
+                        isShowLoadMore={false}
+                    />
+                </View>)
         }
         return null;
     }
@@ -332,8 +340,9 @@ class TabHistoryHall extends BaseComponent {
 // 选择store中的state注入props
 function mapStateToProps(store) {
     //const store = Immutable.toJS();
-    var tabHistoryHallReducer = store.tabHistoryHallReducer.toJS();
+    let tabHistoryHallReducer = store.tabHistoryHallReducer.toJS();
     return {
+        initLoading: tabHistoryHallReducer.initLoading,
         isRefreshing: tabHistoryHallReducer.isRefreshing,
         awardInfo: tabHistoryHallReducer.awardInfo,
         awardInfoNew: tabHistoryHallReducer.awardInfoNew,
@@ -346,6 +355,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(TabHistoryHallActions.refreshAction()),
+        loadingAction: () => dispatch(TabHistoryHallActions.loadingAction()),
         getAwardHomeAction: () => dispatch(TabHistoryHallActions.getAwardHomeAction()),
         getRefreshDataAction: () => dispatch(TabHistoryHallActions.getRefreshDataAction()),
     };

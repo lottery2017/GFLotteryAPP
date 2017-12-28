@@ -6,7 +6,7 @@ import {
   Animated,
   Text,
 } from 'react-native';
-import BaseComponent from '../../BaseComponent';
+import BaseComponent from '../../../BaseComponent';
 import { RefreshStatus } from '../LDRLStatus';
 import PropTypes from 'prop-types';
 const ScreenWidth = Dimensions.get('window').width;// 屏幕宽度
@@ -15,10 +15,10 @@ const defaultHeaderStyles = StyleSheet.create({
   background: {
     flexDirection: 'row',
     alignItems: 'center',
-    position: 'absolute',
+   /* position: 'absolute',
     top: -69.5,
     left: 0,
-    right: 0,
+    right: 0,*/
     height: 70,
     justifyContent: 'center',
   },
@@ -84,7 +84,7 @@ Date.prototype.Format = function dateFormate(fmt) {
 
 export default class LDDefaultRefresh extends BaseComponent {
   static propTypes = {// 用来指定props的类型
-    refresStatus: PropTypes.number.isRequired,
+    refreshStatus: PropTypes.number.isRequired,
     scrollOffsetY: PropTypes.number.isRequired,//eslint-disable-line
   };
 
@@ -100,9 +100,7 @@ export default class LDDefaultRefresh extends BaseComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.refresStatus === RefreshStatus.pullToRefresh && this.props
-    .refresStatus === RefreshStatus
-    .refreshing && nextProps.scrollOffsetY === 0) {
+    if (nextProps.refreshStatus === RefreshStatus.refreshDown ) {
         // 刷新完归位以后,保存一下刷新时间
       this.refreshLastDate = new Date();
       this.setState({
@@ -110,13 +108,13 @@ export default class LDDefaultRefresh extends BaseComponent {
         rotation: new Animated.Value(0),
       });
     }
-    if (nextProps.refresStatus === RefreshStatus.refreshing) {
+    if (nextProps.refreshStatus === RefreshStatus.refreshing) {
       this.setState({
         coinOpacity: 1,
       });
     }
-    if (this.props.refresStatus === RefreshStatus
-    .pullToRefresh && nextProps.refresStatus === RefreshStatus.releaseToRefresh) {
+    if (this.props.refreshStatus === RefreshStatus
+    .pullToRefresh && nextProps.refreshStatus === RefreshStatus.releaseToRefresh) {
        // 小猪弹跳
       Animated.sequence([
         // 先向上位移
@@ -149,7 +147,7 @@ export default class LDDefaultRefresh extends BaseComponent {
     return '上次刷新时间:从未';
   }
   startRefreshingAnimation() {
-    if (this.props.refresStatus !== RefreshStatus.refreshing) {
+    if (this.props.refreshStatus !== RefreshStatus.refreshing) {
       return;
     }
     Animated.parallel([
@@ -201,15 +199,15 @@ export default class LDDefaultRefresh extends BaseComponent {
   }
 
   renderRefreshTitle() {
-    if (this.props.refresStatus === RefreshStatus.pullToRefresh) {
+    if (this.props.refreshStatus === RefreshStatus.pullToRefresh) {
       return (
         <Text style={defaultHeaderStyles.statusTitle}>{RefreshTitle.pullToRefresh}</Text>
       );
-    } else if (this.props.refresStatus === RefreshStatus.releaseToRefresh) {
+    } else if (this.props.refreshStatus === RefreshStatus.releaseToRefresh) {
       return (
         <Text style={defaultHeaderStyles.statusTitle}>{RefreshTitle.releaseToRefresh}</Text>
       );
-    } else if (this.props.refresStatus === RefreshStatus.refreshing) {
+    } else if (this.props.refreshStatus === RefreshStatus.refreshing) {
       return (
         <Text style={defaultHeaderStyles.statusTitle}>{RefreshTitle.refreshing}</Text>
       );

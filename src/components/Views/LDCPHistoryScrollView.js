@@ -2,8 +2,7 @@ import React from 'react';
 import {
     NetInfo,
 } from 'react-native';
-import {LDRefreshScrollView} from '../Views/LDRLScroll/LDLoadMoreRefresh';
-import EmptyHintView from '../Views/EmptyHintView';
+import {LDRefreshScrollView} from './GFRefresh/GFScroll/index';
 import LoadingView from '../Views/LoadingView';
 import PropTypes from 'prop-types';
 import * as CommentConfig from "../../utils/CommonConfig";
@@ -30,7 +29,7 @@ export default class LDCPHistoryScrollView extends LDRefreshScrollView {
          * 是否显示刷新状态
          */
         isRefreshing: PropTypes.bool,
-    }
+    };
 
     /**
      * 默认不显示空状态
@@ -38,7 +37,7 @@ export default class LDCPHistoryScrollView extends LDRefreshScrollView {
     static defaultProps = {
         empty: false,
         isRefreshing: true,
-    }
+    };
 
     componentDidMount() {
         NetInfo.isConnected.addEventListener(
@@ -92,11 +91,6 @@ export default class LDCPHistoryScrollView extends LDRefreshScrollView {
             return (<LoadingView height={this.state.loadingViewHeight}/>
             );
         }
-        return (
-            <EmptyHintView
-                height={this.state.emptyHintViewHeight}
-            />
-        );
     }
 
     getList() {
