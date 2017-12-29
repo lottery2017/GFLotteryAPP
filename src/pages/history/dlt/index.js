@@ -7,7 +7,6 @@ import {ListView, View} from "react-native";
 import {connect} from "react-redux";
 import DLTCell from "../../../components/TabHistoryCells/dltcell";
 import * as DLTListActions from "../../../actions/history/dlt";
-import HistoryListHeader from "../../../components/HistoryListHeader/HistoryListHeader";
 import LotteryToolBar from "../../../components/Views/LotteryToolBar";
 import {LoadMoreStatus} from "../../../components/Views/GFRefresh/GFScroll/index";
 import BaseComponent from "../../../components/Views/BaseComponent";
@@ -82,7 +81,6 @@ class DLTHistoryList extends BaseComponent {
     }
 
     functionBindThis() {
-        this.renderHeader = this.renderHeader.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
         this.renderRow = this.renderRow.bind(this);
         this.onEndReached = this.onEndReached.bind(this);
@@ -98,13 +96,6 @@ class DLTHistoryList extends BaseComponent {
             />
         );
     }
-
-    renderHeader() {
-        return (
-            <HistoryListHeader headerLabelString={this.props.headerLabelString}/>
-        );
-    }
-
     render() {
         let dataBlob = [];
         let i = 0;

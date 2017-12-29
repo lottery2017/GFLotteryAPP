@@ -77,37 +77,11 @@ export default class RefreshFlatList extends Component {
     componentWillReceiveProps(nextProps, nextState) {
         this.setRefreshState(nextProps.isRefresh)
     }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        /**
-         * This code is just an example of the rotation animation.
-         */
-        if (this.state.refreshState != RefreshStatus.refreshing
-            && nextState.refreshState == RefreshStatus.refreshing) {
-            this.initAnimated()
-        }
-        return true
-    }
-
     componentWillUnmount() {
         this.t && clearTimeout(this.t)
         this.tt && clearTimeout(this.tt)
         this.timer1 && clearTimeout(this.timer1);
     }
-
-    initAnimated() {
-        this.state.rotation.setValue(0)
-        this._an = Animated.timing(this.state.rotation, {
-            toValue: 1,
-            duration: 1000,
-            easing: Easing.linear,
-        }).start((r) => {
-            if (this.state.refreshState == RefreshStatus.refreshing) {
-                this.initAnimated()
-            }
-        })
-    }
-
     // Test onRefreshFun
     _onRefreshFun = () => {
         this.setRefreshState(true)
@@ -123,7 +97,7 @@ export default class RefreshFlatList extends Component {
         } else {
             if (this.beforeRefreshState == RefreshStatus.refreshing) {
                 this.beforeRefreshState = RefreshStatus.pullToRefresh
-                this.updateRefreshViewState(RefreshStatus.refreshdown)
+                this.updateRefreshViewState(RefreshStatus.refreshDown)
             } else {
                 //?
                 // this.updateRefreshViewState(RefreshState.pullToRefresh)
@@ -144,8 +118,8 @@ export default class RefreshFlatList extends Component {
                     this._flatList.scrollToOffset({animated: true, offset: -this.headerHeight})
                 })
                 break;
-            case RefreshStatus.refreshdown:
-                this.setState({refreshState: RefreshStatus.refreshdown, percent: 100, toRenderItem: true}, () => {
+            case RefreshStatus.refreshDown:
+                this.setState({refreshState: RefreshStatus.refreshDown, percent: 100, toRenderItem: true}, () => {
                     // This delay is shown in order to show the refresh time to complete the refresh
                     this.t = setTimeout(() => {
                         this._flatList.scrollToOffset({animated: true, offset: 0})
@@ -173,7 +147,7 @@ export default class RefreshFlatList extends Component {
         if (!this.isOnMove && -y >= 0) {
             //刷新状态下，上推列表依percent然显示100%
             let p = parseInt(( -y / (this.headerHeight)) * 100)
-            if (this.state.refreshState !== RefreshStatus.refreshdown)
+            if (this.state.refreshState !== RefreshStatus.refreshDown)
                 this.setState({percent: (p > 100 ? 100 : p)})
         }
     }
@@ -216,7 +190,7 @@ export default class RefreshFlatList extends Component {
 
     customRefreshView = () => {
         const {customRefreshView} = this.props;
-        const {refreshState, percent} = this.state;
+        const {refreshState, percent} = this.state;        
         if (customRefreshView) return customRefreshView(refreshState, percent);
         return (
             <LDDefaultRefresh
