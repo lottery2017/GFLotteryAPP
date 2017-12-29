@@ -72,18 +72,12 @@ export default class RefreshFlatList extends Component {
     componentWillReceiveProps(nextProps, nextState) {
         this.setRefreshState(nextProps.isRefresh)
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 60b969ff8ceac0b7c83217c88fed0cd416d676bb
     componentWillUnmount() {
         this.t && clearTimeout(this.t);
         this.timer1 && clearTimeout(this.timer1);
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 60b969ff8ceac0b7c83217c88fed0cd416d676bb
     // Test onRefreshFun
     _onRefreshFun = () => {
         this.setRefreshState(true)
@@ -98,11 +92,7 @@ export default class RefreshFlatList extends Component {
             this.updateRefreshViewState(RefreshStatus.refreshing)
         } else {
             if (this.beforeRefreshState == RefreshStatus.refreshing) {
-<<<<<<< HEAD
                 this.beforeRefreshState = RefreshStatus.pullToRefresh;
-=======
-                this.beforeRefreshState = RefreshStatus.pullToRefresh
->>>>>>> 60b969ff8ceac0b7c83217c88fed0cd416d676bb
                 this.updateRefreshViewState(RefreshStatus.refreshDown)
             } else {
                 //?
@@ -192,13 +182,8 @@ export default class RefreshFlatList extends Component {
 
     customRefreshView = () => {
         const {customRefreshView} = this.props;
-<<<<<<< HEAD
         const {refreshState, percent} = this.state;
         if (customRefreshView) return customRefreshView(refreshState, this._scrollEndY);
-=======
-        const {refreshState, percent} = this.state;        
-        if (customRefreshView) return customRefreshView(refreshState, percent);
->>>>>>> 60b969ff8ceac0b7c83217c88fed0cd416d676bb
         return (
             <LDDefaultRefresh
                 refreshStatus={this.state.refreshState}
