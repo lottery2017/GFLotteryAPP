@@ -3,7 +3,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {ListView, View} from "react-native";
+import {Text, View} from "react-native";
 import {connect} from "react-redux";
 import DLTCell from "../../../components/TabHistoryCells/dltcell";
 import * as DLTListActions from "../../../actions/history/dlt";
@@ -82,7 +82,6 @@ class DLTHistoryList extends BaseComponent {
     }
 
     functionBindThis() {
-        this.renderHeader = this.renderHeader.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
         this.renderRow = this.renderRow.bind(this);
         this.onEndReached = this.onEndReached.bind(this);
@@ -99,11 +98,6 @@ class DLTHistoryList extends BaseComponent {
         );
     }
 
-    renderHeader() {
-        return (
-            <HistoryListHeader headerLabelString={this.props.headerLabelString}/>
-        );
-    }
 
     render() {
         let dataBlob = [];

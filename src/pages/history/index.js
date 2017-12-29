@@ -119,7 +119,6 @@ class TabHistoryHall extends BaseComponent {
                 i++;
             });
             return (
-                <View style={{flex: 1}}>
                     <GFRefreshFlatList
                         data={dataBlob}
                         initLoading={this.props.initLoading}
@@ -128,7 +127,7 @@ class TabHistoryHall extends BaseComponent {
                         renderItem={this.renderItem.bind(this)}
                         isShowLoadMore={false}
                     />
-                </View>)
+                )
         }
         return null;
     }

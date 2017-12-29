@@ -1,5 +1,4 @@
 import { createAction } from 'redux-actions';
-import { NativeModules } from 'react-native';
 import * as types from '../../ActionTypes';
 import * as DLTHistoryListService from '../../../service/history/dlt';
 import * as helper from '../../../components/HistoryListHeader/helper';

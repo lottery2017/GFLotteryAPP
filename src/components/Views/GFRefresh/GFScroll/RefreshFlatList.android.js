@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Animated, Dimensions, Easing, FlatList, VirtualizedList} from "react-native";
+import {Animated, View, Easing, FlatList, VirtualizedList} from "react-native";
 
 import Item from "./Item";
 import AndroidSwipeRefreshLayout from "./AndroidSwipeRefreshLayout";
@@ -34,15 +34,14 @@ export default class FlatListTest extends Component {
         this._marginTop = new Animated.Value()
         this._scrollEndY = 0
         this.headerHeight = 70// Default refreshView height
-        this.isAnimating = false // Controls the same animation not many times during the sliding process
         this.beforeRefreshState = RefreshStatus.pullToRefresh
     }
 
     componentWillMount() {
         const {customRefreshView} = this.props
         if (customRefreshView) {
-            const {height} = customRefreshView(RefreshStatus.pullToRefresh).props.style
-            this.headerHeight = height
+            /*const {height} = customRefreshView(RefreshStatus.pullToRefresh).props.style;
+            this.headerHeight = height*/
         }
         this._marginTop.setValue(-this.headerHeight)
         this._marginTop.addListener((v) => {
@@ -63,7 +62,6 @@ export default class FlatListTest extends Component {
     componentWillUnmount() {
         this.t && clearTimeout(this.t);
         this.timer1 && clearTimeout(this.timer1);
-        this.timer2 && clearTimeout(this.timer2);
     }
 
     // test onRefreshFun
@@ -114,7 +112,7 @@ export default class FlatListTest extends Component {
                 this.setState({refreshState: RefreshStatus.refreshing,}, () => {
                     Animated.timing(
                         this._marginTop,
-                        {
+                            {
                             toValue: 0,
                             duration: 200,
                             easing: Easing.linear
@@ -223,12 +221,15 @@ export default class FlatListTest extends Component {
     customRefreshView = () => {
         const {customRefreshView} = this.props;
         const {refreshState, percent} = this.state;
-        if (customRefreshView) return customRefreshView(refreshState, percent);
+        if (customRefreshView) return customRefreshView(refreshState, parseFloat(JSON.stringify(this._marginTop)));
         return (
-            <LDDefaultRefresh
-                refreshStatus={this.state.refreshState}
-                scrollOffsetY={parseFloat(JSON.stringify(this._marginTop))}
-            />
+            <View>
+                <LDDefaultRefresh
+                    refreshStatus={this.state.refreshState}
+                    scrollOffsetY={parseFloat(JSON.stringify(this._marginTop))}
+                />
+                {this.props.ListHeaderComponent}
+            </View>
         )
     };
 

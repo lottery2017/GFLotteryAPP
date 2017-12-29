@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import * as CommentConfig from "../../../utils/CommonConfig";
 import RefreshFlatList, {LoadMoreStatus, ViewType} from "./GFScroll/index";
 import LoadingView from "../LoadingView";
+import LDDefaultRefresh from "./GFScroll/Refresh/LDDefaultRefresh";
 
 /**
  *===============================================FlatListLoadPull=====================================
@@ -109,20 +110,31 @@ export class GFRefreshFlatList extends FlatList {
             return (
                 <LoadingView/>
             )
-        } else{
+        } else {
             return (
                 <RefreshFlatList
                     {...this.props}
                     viewType={ViewType.ListView}
                     initialNumToRender={20}
-                    ItemSeparatorComponent={this.props.ItemSeparatorComponent||this._separator.bind(this)}
+                    ItemSeparatorComponent={this.props.ItemSeparatorComponent || this._separator.bind(this)}
                     listFooterComponent={this.renderFooter.bind(this)}
                     onEndReached={this.onEndReached.bind(this)}
                     ListEmptyComponent={this.props.ListEmptyComponent || this.emptyView.bind(this)}
+                    customRefreshView={this.customRefreshView.bind(this)}
                 />
             )
         }
     }
+
+    customRefreshView(refreshState, scrollOffsetY) {
+        return (
+            <LDDefaultRefresh
+                refreshStatus={refreshState}
+                scrollOffsetY={scrollOffsetY}
+            />
+        )
+    }
+
     _separator = () => {
         return (<View style={styles.lineStyle}/>)
     }
@@ -167,7 +179,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop:40,
+        marginTop: 40,
     },
     image: {
         marginBottom: 15,
