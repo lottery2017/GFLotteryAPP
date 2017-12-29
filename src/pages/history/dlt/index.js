@@ -7,7 +7,6 @@ import {Text, View} from "react-native";
 import {connect} from "react-redux";
 import DLTCell from "../../../components/TabHistoryCells/dltcell";
 import * as DLTListActions from "../../../actions/history/dlt";
-import HistoryListHeader from "../../../components/HistoryListHeader/HistoryListHeader";
 import LotteryToolBar from "../../../components/Views/LotteryToolBar";
 import {LoadMoreStatus} from "../../../components/Views/GFRefresh/GFScroll/index";
 import BaseComponent from "../../../components/Views/BaseComponent";
@@ -97,8 +96,11 @@ class DLTHistoryList extends BaseComponent {
             />
         );
     }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 60b969ff8ceac0b7c83217c88fed0cd416d676bb
     render() {
         let dataBlob = [];
         let i = 0;
