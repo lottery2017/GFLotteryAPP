@@ -1,28 +1,30 @@
 import React, {Component} from "react";
 import {StackNavigator, TabNavigator} from "react-navigation";
+import CardStackStyleInterpolator from "react-navigation/src/views/CardStack/CardStackStyleInterpolator";
+//Android从下到上跳转动画修改
 import HallStackNav from "../pages/hall/hall";
 import HistoryStackNav from "../pages/history";
 import DiscoverStackNav from "../pages/discover/discoverHall";
 import MineStackNav from "../pages/Mine/mineHall";
 //双色球
-import SSQHistoryList from '../pages/history/ssq';
+import SSQHistoryList from "../pages/history/ssq";
 //大乐透
-import DLTHistoryList from '../pages/history/dlt';
+import DLTHistoryList from "../pages/history/dlt";
 //十一选五
-import SYXWHistoryList from '../pages/history/syxw';
+import SYXWHistoryList from "../pages/history/syxw";
 //时时彩
-import SSCHistoryList from '../pages/history/ssc';
+import SSCHistoryList from "../pages/history/ssc";
 //3D
-import X3DHistoryList from '../pages/history/x3d';
+import X3DHistoryList from "../pages/history/x3d";
 //快3
-import K3HistoryList from '../pages/history/k3';
+import K3HistoryList from "../pages/history/k3";
 //胜负彩
-import SFCHistoryList from '../pages/history/sfc';
+import SFCHistoryList from "../pages/history/sfc";
 //竞彩足球
-import JCZQHistoryList from '../pages/history/jczq';
+import JCZQHistoryList from "../pages/history/jczq";
 //竞彩篮球
-import JCLQHistoryList from '../pages/history/jclq';
-const TabbarNavigator = TabNavigator({
+import JCLQHistoryList from "../pages/history/jclq";
+const TabBarNavigator = TabNavigator({
     HallStackNav: {screen: HallStackNav},
     HistoryStackNav: {screen: HistoryStackNav},
     DiscoverStackNav: {screen: DiscoverStackNav},
@@ -54,52 +56,78 @@ const TabbarNavigator = TabNavigator({
     lazy: true,
     backBehavior: 'none',
 });
-
+const navigationOptions = {
+    headerStyle: {backgroundColor: '#D7213C'},
+    headerTitleStyle: {color: '#fff'},
+    headerBackTitleStyle: {backgroundColor: '#fff'},
+    gesturesEnabled: false,
+    headerTintColor: '#fff',
+};
 const AppNavigator = StackNavigator({
     TabBar: {
-        screen: TabbarNavigator,
+        screen: TabBarNavigator,
         navigationOptions: {
             header: null
         }
     }, SSQHistoryList: {
         screen: SSQHistoryList,
         navigationOptions: {
+            ...navigationOptions,
             title: '双色球',
         }
     }, DLTHistoryList: {
         screen: DLTHistoryList,
         navigationOptions: {
+            ...navigationOptions,
             title: '大乐透',
         }
     }, SYXWHistoryList: {
         screen: SYXWHistoryList,//十一选五
+        navigationOptions: {
+            ...navigationOptions,
+        }
     }, SSCHistoryList: {
         screen: SSCHistoryList,//时时彩
+        navigationOptions: {
+            ...navigationOptions,
+        }
     }, X3DHistoryList: {
         screen: X3DHistoryList,//3D
         navigationOptions: {
+            ...navigationOptions,
             title: '3D',
         }
     }, K3HistoryList: {
         screen: K3HistoryList,//快3
+        navigationOptions: {
+            ...navigationOptions,
+        }
     }, SFCHistoryList: {
         screen: SFCHistoryList,//胜负彩
         navigationOptions: {
+            ...navigationOptions,
             title: '胜负彩',
         }
     }, JCZQHistoryList: {
         screen: JCZQHistoryList,
         navigationOptions: {
+            ...navigationOptions,
             title: '竞彩足球',
         }
     }, JCLQHistoryList: {
         screen: JCLQHistoryList,
         navigationOptions: {
+            ...navigationOptions,
             title: '竞彩篮球',
         }
     },
-
-
+}, {
+    headerMode: 'screen',
+    mode: 'modal',
+    transitionConfig: () => ({
+        //此处配置为修改跳转场景动画
+        screenInterpolator: CardStackStyleInterpolator.forHorizontal,
+    })
 });
 
 export {

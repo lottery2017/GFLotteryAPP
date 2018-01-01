@@ -1,9 +1,9 @@
-import { createAction } from 'redux-actions';
-import { NativeModules } from 'react-native';
-import * as types from '../../ActionTypes';
-import * as K3HistoryListService from '../../../service/history/k3';
+import {createAction} from "redux-actions";
+import * as types from "../../ActionTypes";
+import * as K3HistoryListService from "../../../service/history/k3";
 
 export const refreshAction = createAction(types.K3HISTORYLIST_REFRESHING);
+export const loadingAction = createAction(types.K3HISTORYLIST_LOADING);
 export const clearDataAction = createAction(types.K3HISTORYLIST_CLEARDATA);// 清空数据
 
 // 获得最近的20条数据

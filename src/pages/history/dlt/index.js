@@ -3,15 +3,15 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {Text, View} from "react-native";
+import {View} from "react-native";
 import {connect} from "react-redux";
 import DLTCell from "../../../components/TabHistoryCells/dltcell";
 import * as DLTListActions from "../../../actions/history/dlt";
-import HistoryListHeader from "../../../components/HistoryListHeader/HistoryListHeader";
 import LotteryToolBar from "../../../components/Views/LotteryToolBar";
 import {LoadMoreStatus} from "../../../components/Views/GFRefresh/GFScroll/index";
 import BaseComponent from "../../../components/Views/BaseComponent";
 import {GFRefreshFlatList} from "../../../components/Views/GFRefresh/GFRefreshFlatList";
+let num=0;
 class DLTHistoryList extends BaseComponent {
     static propTypes = {
         gameEn: PropTypes.string,
@@ -19,12 +19,10 @@ class DLTHistoryList extends BaseComponent {
         isLoading: PropTypes.bool,
         historyItems: PropTypes.array,
         hasNextPage: PropTypes.bool,
-        headerLabelString: PropTypes.string,
         isEmpty: PropTypes.bool,
         refreshAction: PropTypes.func.isRequired,
         loadingAction: PropTypes.func.isRequired,
         getLatestTwentyAwards: PropTypes.func.isRequired,
-        getHeaderLabelString: PropTypes.func.isRequired,
         clearData: PropTypes.func.isRequired,
         getNextPageAwards: PropTypes.func.isRequired,
     };
@@ -34,7 +32,6 @@ class DLTHistoryList extends BaseComponent {
         isLoading: false,
         historyItems: [],
         hasNextPage: false,
-        headerLabelString: '',
         isEmpty: true,
     }
 
@@ -50,7 +47,6 @@ class DLTHistoryList extends BaseComponent {
     componentDidMount() {
         this.props.loadingAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
-        this.props.getHeaderLabelString(this.state.gameEn);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -83,7 +79,6 @@ class DLTHistoryList extends BaseComponent {
 
     functionBindThis() {
         this.onRefresh = this.onRefresh.bind(this);
-        this.renderRow = this.renderRow.bind(this);
         this.onEndReached = this.onEndReached.bind(this);
     }
 
@@ -138,7 +133,6 @@ function mapStateToProps(store) {
         isRefreshing: DLTHistoryListReducer.isRefreshing,
         isLoading: DLTHistoryListReducer.isLoading,
         historyItems: DLTHistoryListReducer.historyItems,
-        headerLabelString: DLTHistoryListReducer.headerLabelString,
         hasNextPage: DLTHistoryListReducer.hasNextPage,
         isEmpty: DLTHistoryListReducer.isEmpty,
     };
@@ -151,7 +145,6 @@ function mapDispatchToProps(dispatch) {
         loadingAction: () => dispatch(DLTListActions.loadingAction()),
         getLatestTwentyAwards: (gameEn, periodName) => dispatch(DLTListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(DLTListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
-        getHeaderLabelString: gameEn => dispatch(DLTListActions.getHeaderLabelStringAction(gameEn)),
         clearData: () => dispatch(DLTListActions.clearDataAction()),
     };
 }

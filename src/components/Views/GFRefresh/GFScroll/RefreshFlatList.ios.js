@@ -8,7 +8,7 @@
 
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Animated, Easing, FlatList, PanResponder} from "react-native";
+import {FlatList, PanResponder} from "react-native";
 import Item from "./Item";
 import {RefreshStatus, ViewType} from "./LDRLStatus";
 import LDDefaultRefresh from "./Refresh/LDDefaultRefresh";
@@ -212,7 +212,7 @@ export default class RefreshFlatList extends Component {
                     renderItem={this._renderItem}
                     keyExtractor={(v, i) => i}
                     ListHeaderComponent={this.customRefreshView}
-                    style={[{...this.props.style}, {marginTop: -this.headerHeight}]}
+                    style={[{...this.props.style}, {marginTop: -this.headerHeight, overflow: 'hidden'}]}
                 />
             )
         } else {
@@ -231,7 +231,7 @@ export default class RefreshFlatList extends Component {
                     ListFooterComponent={this._ListFooterComponent}
                     onEndReached={this._onEndReached}
                     onEndReachedThreshold={0.1}
-                    style={[{...this.props.style}, {marginTop: -this.headerHeight}]}
+                    style={[{...this.props.style}, {marginTop: -this.headerHeight, overflow: 'hidden'}]}
                 />
             );
         }

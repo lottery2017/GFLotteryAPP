@@ -5,6 +5,7 @@ import * as SFCHistoryListService from '../../../service/history/sfc';
 
 
 export const refreshAction = createAction(types.SFCHISTORYLIST_REFRESHING);
+export const loadingAction = createAction(types.SFCHISTORYLIST_LOADING);
 export const clearDataAction = createAction(types.SFCHISTORYLIST_CLEARDATA);// 清空数据
 
 // 获得最近的20条数据

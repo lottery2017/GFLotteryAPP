@@ -5,6 +5,7 @@ import * as SYXWHistoryListService from '../../../service/history/syxw';
 
 
 export const refreshAction = createAction(types.SYXWHISTORYLIST_REFRESHING);
+export const loadingAction = createAction(types.SYXWHISTORYLIST_LOADING);
 export const clearDataAction = createAction(types.SYXWHISTORYLIST_CLEARDATA);// 清空数据
 
 // 获得最近的20条数据

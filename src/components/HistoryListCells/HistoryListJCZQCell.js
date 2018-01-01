@@ -458,11 +458,8 @@ export default class HistoryListJCZQCell extends BaseComponent {
   }
 
   render() {
-    const route = () => {
-      NativeModules.LDRNBridge.routeWithURL(`rrzcp://live?g=jczq&mid=${this.props.rowData.mid}&hid=${this.props.rowData.hostId}&vid=${this.props.rowData.guestId}&showBetButton=1&index=0`, {});
-    };
     return (
-      <TouchableOpacity activeOpacity={1.0} style={styles.rootTouchableOpacity} onPress={route}>
+      <TouchableOpacity activeOpacity={1.0} style={styles.rootTouchableOpacity} onPress={this.props.onPress}>
         <View style={styles.infoView}>
           <View style={styles.gameInfoView}>
             <View style={styles.gameResultView}>

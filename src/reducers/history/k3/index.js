@@ -4,6 +4,7 @@ import * as types from '../../../actions/ActionTypes';
 const MAX_SAVE_PERIODS = 200; // 展示的最多条数
 const defaultUserState = Immutable.fromJS({
     isRefreshing: false,
+    isLoading: false,
     historyItems: [],
     hasNextPage: true,
     isEmpty: false,
@@ -15,9 +16,14 @@ export default function K3HistoryList(state = defaultUserState, action) {
             return state.merge({
                 isRefreshing: true,
             });
+        case types.K3HISTORYLIST_LOADING:
+            return state.merge({
+                isLoading: true,
+            });
         case types.K3HISTORYLIST_REFRESHLIST:
             return state.merge({
                 isRefreshing: false,
+                isLoading: false,
                 historyItems: action.payload.latestTwentyItems,
                 hasNextPage: action.payload.latestTwentyItems.length >= 20,
                 isEmpty: action.payload.latestTwentyItems.length <= 0,
@@ -25,6 +31,7 @@ export default function K3HistoryList(state = defaultUserState, action) {
         case types.K3HISTORYLIST_GETNEXTPAGE:
             return state.merge({
                 isRefreshing: false,
+                isLoading: false,
                 hasNextPage: action.payload.nextPageItems.length === 10 &&
                 state.get('historyItems').size + action.payload.nextPageItems.length < MAX_SAVE_PERIODS,
                 historyItems: action.payload.nextPageItems.length > 0 ?

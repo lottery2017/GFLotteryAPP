@@ -1,9 +1,10 @@
-import Immutable from 'immutable';
-import * as types from '../../../actions/ActionTypes';
+import Immutable from "immutable";
+import * as types from "../../../actions/ActionTypes";
 
 const defaultUserState = Immutable.fromJS({
     datePickerShow: false,
     isRefreshing: false,
+    isLoading: false,
     lastest3DaysItems: [], // 二维数组，做多存放最近三天的数据
     requestDate: new Date(),
     sectionsStatus: {},
@@ -18,6 +19,10 @@ export default function JCZQHistoryList(state = defaultUserState, action) {
             return state.merge({
                 isRefreshing: true,
             });
+        case types.JCZQHISTORYLIST_LOADING:
+            return state.merge({
+                isLoading: true,
+            });
         case types.JCZQHISTORYLIST_BARDATECLICKED:
             return state.merge({
                 datePickerShow: true,
@@ -29,10 +34,11 @@ export default function JCZQHistoryList(state = defaultUserState, action) {
                 resetHeader: false,
             });
         case types.JCZQHISTORYLIST_LATESTDAYLIST:
-            return Immutable.fromJS({
+            return state.merge({
                 lastest3DaysItems: action.payload.latest3DaysItems,
                 requestDate: action.payload.requestDate,
                 isRefreshing: false,
+                isLoading: false,
                 sectionsStatus: {},
                 resetHeader: true,
                 sectionsInfo: action.payload.sectionsInfo,

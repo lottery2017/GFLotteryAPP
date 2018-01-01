@@ -6,7 +6,6 @@ const MAX_SAVE_PERIODS = 200; // 展示的最多条数
 const defaultUserState = Immutable.fromJS({
     isRefreshing: false,
     historyItems: [],
-    headerLabelString: '',
     hasNextPage: true,
     isEmpty: false,
     isLoading:false,
@@ -39,10 +38,6 @@ export default function SSQHistoryList(state = defaultUserState, action) {
                 historyItems: action.payload.nextPageItems.length > 0 ?
                     state.get('historyItems').concat(Immutable.fromJS(action.payload.nextPageItems)) :
                     state.get('historyItems'),
-            });
-        case types.SSQHISTORYLIST_HEADERDISPLAY:
-            return state.merge({
-                headerLabelString: action.payload.headerLabelString,
             });
         case types.SSQHISTORYLIST_CLEARDATA:
             return Immutable.fromJS({

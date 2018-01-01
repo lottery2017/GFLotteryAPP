@@ -1,16 +1,8 @@
-import React from 'react';
-import {
-    View,
-    Text,
-    Image,
-    StyleSheet,
-    TouchableOpacity,
-    Dimensions,
-    ImageBackground
-} from 'react-native';
-import PropTypes from 'prop-types';
-import * as helper from './helper';
-import BaseComponent from '../Views/BaseComponent';
+import React from "react";
+import {Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import PropTypes from "prop-types";
+import * as helper from "./helper";
+import BaseComponent from "../Views/BaseComponent";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const X_SCALE = SCREEN_WIDTH / 320.0;
@@ -126,7 +118,7 @@ export default class SSQCell extends BaseComponent {
             );
         } else if (this.props.cellStyle === 'historyList') {
             const awardNoArray = getAwardNoArray(this.props.rowData.awardNo);
-            if (this.props.row == 0) {
+            if (this.props.row === 0) {
                 return (
                     <View style={{backgroundColor: 'white', justifyContent: 'space-between'}}>
                         <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{

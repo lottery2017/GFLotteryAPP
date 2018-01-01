@@ -4,6 +4,7 @@ import * as types from '../../ActionTypes';
 import getJCZQLatestDayAwards from '../../../service/history/jczq';
 
 export const refreshAction = createAction(types.JCZQHISTORYLIST_REFRESHING);
+export const loadingAction = createAction(types.JCZQHISTORYLIST_LOADING);
 export const barDateClicked = createAction(types.JCZQHISTORYLIST_BARDATECLICKED);
 export const datePickerViewDissapper = createAction(types.JCZQHISTORYLIST_DATEPICKERVIEWDISAPPER);
 export const clearDataAction = createAction(types.JCZQHISTORYLIST_CLEARDATA);// 清空数据

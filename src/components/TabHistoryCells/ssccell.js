@@ -32,7 +32,7 @@ export default class SSCCell extends BaseComponent {
         periodName: PropTypes.string,
         cellStyle: PropTypes.oneOf(['tabHall', 'historyList', 'detail']).isRequired,
         // 列表页需要
-        row: PropTypes.string,
+        row: PropTypes.number,
         rowData: PropTypes.object,
     };
     static defaultProps = {
@@ -41,7 +41,7 @@ export default class SSCCell extends BaseComponent {
         awardTime: '',
         periodName: '',
         // 列表页需要
-        row: '',
+        row: 0,
         rowData: null,
     };
 
@@ -135,22 +135,12 @@ export default class SSCCell extends BaseComponent {
             );
         } else if (this.props.cellStyle === 'historyList') {
             const awardNoArr = getAwardNoArray(this.props.rowData.awardNo);
-            const bgImage = this.props.row === '0' ? require('../../../images/redBall.png') : require('../../../images/transparencyBall.png');
-            const textStyle = this.props.row === '0' ? styles.whiteText : styles.redText;
-            const route = () => {
-                NativeModules.LDRNBridge.routeWithURL('awardDetailsList', {
-                    gameEn: this.props.gameEn,
-                    awardNo: this.props.rowData.awardNo,
-                    awardTime: this.props.rowData.awardTime,
-                    period: this.props.rowData.periodName,
-                    luckyBlue: this.props.rowData.luckyBlue,
-                    extra: this.props.rowData.extra
-                });
-            };
+            const bgImage = this.props.row === 0 ? require('../../../images/redBall.png') : require('../../../images/transparencyBall.png');
+            const textStyle = this.props.row === 0 ? styles.whiteText : styles.redText;
             if (this.props.rowData && this.props.rowData.awardNo) {
                 return (
                     <View>
-                        <TouchableOpacity activeOpacity={1.0} onPress={route} style={{
+                        <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{
                             height: 87 * X_SCALE,
                             flexDirection: 'row',
                             backgroundColor: 'white',

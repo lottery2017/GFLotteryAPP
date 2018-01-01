@@ -1,18 +1,9 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  NativeModules,
-  TouchableOpacity,
-  Dimensions,
-  StyleSheet,
-    ImageBackground
-} from 'react-native';
-import * as GlobalHelper from '../../utils/GlobalHelper';
-import * as helper from './helper';
-import BaseComponent from '../Views/BaseComponent';
-import PropTypes from 'prop-types';
+import React from "react";
+import {Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import * as GlobalHelper from "../../utils/GlobalHelper";
+import * as helper from "./helper";
+import BaseComponent from "../Views/BaseComponent";
+import PropTypes from "prop-types";
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const X_SCALE = SCREEN_WIDTH / 320.0;
 const LINE_HEIGHT = 1;
@@ -29,7 +20,7 @@ export default class KUAI3Cell extends BaseComponent {
     periodName: PropTypes.string,
     // 列表页需要
     rowData: PropTypes.object,
-    row: PropTypes.string,
+      row: PropTypes.number,
   };
 
   static defaultProps = {
@@ -38,7 +29,7 @@ export default class KUAI3Cell extends BaseComponent {
     awardTime: '',
     periodName: '',
     // 列表页需要
-    row: '',
+      row: 0,
     rowData: null,
   };
   render() {
@@ -109,14 +100,17 @@ export default class KUAI3Cell extends BaseComponent {
         </View>
       );
     } else if (this.props.cellStyle === 'historyList') {
-      const route = () => {
-        NativeModules.LDRNBridge.routeWithURL('awardDetailsList', { gameEn: this.props.gameEn, awardNo: this.props.rowData.awardNo, awardTime: this.props.rowData.awardTime, period: this.props.rowData.periodName, luckyBlue: this.props.rowData.luckyBlue, extra: this.props.rowData.extra });
-      };
       const awardNoArr = getAwardNoArray(this.props.rowData.awardNo);
-      if (this.props.row === '0') {
+        if (this.props.row === 0) {
         return (
           <View>
-            <TouchableOpacity activeOpacity={1.0} onPress={route} style={{ height: 87, flexDirection: 'row', backgroundColor: 'white', alignItems: 'center', justifyContent: 'space-between' }}>
+            <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{
+                height: 87,
+                flexDirection: 'row',
+                backgroundColor: 'white',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+            }}>
               <View style={{ height: 87, justifyContent: 'space-between' }}>
                 <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
                   <Text style={{ marginLeft: 5, fontSize: 12, color: '#aaaaaa' }}>{getPeriodString(this.props.rowData.awardTime, this.props.rowData.periodName)}</Text>
@@ -138,7 +132,13 @@ export default class KUAI3Cell extends BaseComponent {
       }
       return (
         <View>
-          <TouchableOpacity activeOpacity={1.0} onPress={route} style={{ height: 87, flexDirection: 'row', backgroundColor: 'white', alignItems: 'center', justifyContent: 'space-between' }}>
+          <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{
+              height: 87,
+              flexDirection: 'row',
+              backgroundColor: 'white',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+          }}>
             <View style={{ height: 87, justifyContent: 'space-between' }}>
               <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={{ marginLeft: 5, fontSize: 12, color: '#aaaaaa' }}>{getPeriodString(this.props.rowData.awardTime, this.props.rowData.periodName)}</Text>

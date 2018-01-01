@@ -18,9 +18,3 @@ export function awardTimeForGameEn(gameEn) {
     default: return '每周一、三、五21:15开奖';
   }
 }
-
-export async function headerLabelStringForGameEn(gameEn) {
-  const pushStateString = await NativeModules.PTCRNBridge.awardPushStatusForGameEn(gameEn);
-  const awardTime = awardTimeForGameEn(gameEn);
-  return `${awardTime}，${pushStateString}`;
-}

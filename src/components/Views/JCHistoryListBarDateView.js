@@ -1,10 +1,5 @@
-import React from 'react';
-import {
-  StyleSheet,
-  Image,
-  Text,
-  View,
-} from 'react-native';
+import React from "react";
+import {Image, StyleSheet, Text, TouchableOpacity} from "react-native";
 
 const styles = StyleSheet.create({
   touchableOpacity: {
@@ -26,14 +21,17 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function JCHistoryListBarDateView() {
-  return (
-    <View style={styles.touchableOpacity}>
-      <Image style={styles.image} source={require('../../../images/JCZQHistoryListBarDate.png')} />
-      <Text style={styles.text}>
-            日期
-      </Text>
-    </View>
-  );
+export default class JCHistoryListBarDateView extends React.Component {
+    render() {
+        return (
+            <TouchableOpacity activeOpacity={1} style={styles.touchableOpacity} onPress={this.props.onPress}>
+              <Image style={styles.image} source={require('../../../images/JCZQHistoryListBarDate.png')}/>
+              <Text style={styles.text}>
+                日期
+              </Text>
+            </TouchableOpacity>
+        );
+    }
+
 }
 

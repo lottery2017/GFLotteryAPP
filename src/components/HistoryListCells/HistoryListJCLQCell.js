@@ -394,17 +394,10 @@ export default class HistoryListJCLQCell extends BaseComponent {
         return false;
     }
 
-    route() {
-        NativeModules.LDRNBridge.routeWithURL(`rrzcp://live?g=jclq&mid=${this.props.rowData.mid}&hid=${this.props.rowData.hostId}&vid=${this.props.rowData.guestId}&showBetButton=1&index=0`, {});
-    }
-
     render() {
-        const route = () => {
-            NativeModules.LDRNBridge.routeWithURL(`rrzcp://live?g=jclq&mid=${this.props.rowData.mid}&hid=${this.props.rowData.hostId}&vid=${this.props.rowData.guestId}&showBetButton=1&index=0`, {});
-        };
         const totalString = `总分${(parseInt(this.props.rowData.guestScore, 0) + parseInt(this.props.rowData.hostScore, 0))} 分差${(parseInt(this.props.rowData.hostScore, 0) - parseInt(this.props.rowData.guestScore, 0))}`;
         return (
-            <TouchableOpacity activeOpacity={1.0} style={styles.rootTouchableOpacity} onPress={route}>
+            <TouchableOpacity activeOpacity={1.0} style={styles.rootTouchableOpacity} onPress={this.props.onPress}>
                 <View style={styles.infoView}>
                     <View style={styles.gameInfoView}>
                         <View style={styles.gameResultView}>

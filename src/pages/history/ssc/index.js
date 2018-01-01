@@ -17,6 +17,7 @@ class SSCHistoryList extends BaseComponent {
     static propTypes = {
         gameEn: PropTypes.string,
         isRefreshing: PropTypes.bool,
+        isLoading: PropTypes.bool,
         historyItems: PropTypes.array,
         hasNextPage: PropTypes.bool,
         isEmpty: PropTypes.bool,
@@ -24,10 +25,12 @@ class SSCHistoryList extends BaseComponent {
         getLatestTwentyAwards: PropTypes.func.isRequired,
         clearData: PropTypes.func.isRequired,
         getNextPageAwards: PropTypes.func.isRequired,
+        loadingAction: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
         isRefreshing: false,
+        isLoading: false,
         historyItems: [],
         hasNextPage: false,
         isEmpty: true,
@@ -43,13 +46,12 @@ class SSCHistoryList extends BaseComponent {
     }
 
     componentDidMount() {
-        this.props.refreshAction();
+        this.props.loadingAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.isRefreshing) {
-            this.setState({isRefresh: false});
         }
         if (nextProps.historyItems.length > 0) {
             this.flatList.setLoadMoreStatus(LoadMoreStatus.idle);
@@ -62,6 +64,7 @@ class SSCHistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
+        this.props.refreshAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
@@ -81,8 +84,8 @@ class SSCHistoryList extends BaseComponent {
         this.renderRow = this.renderRow.bind(this);
     }
 
-    renderRow(rowData, sectionID, rowID) {
-        return (<SSCCell gameEn={this.state.gameEn} rowData={rowData} row={rowID} cellStyle="historyList"/>);
+    renderRow({item, index}) {
+        return (<SSCCell gameEn={this.state.gameEn} rowData={item.value} row={index} cellStyle="historyList"/>);
     }
 
     render() {
@@ -103,10 +106,10 @@ class SSCHistoryList extends BaseComponent {
                             this.flatList = ref;
                         }}
                         data={dataBlob}
-                        initLoading={this.props.isRefreshing}
+                        initLoading={this.props.isLoading}
                         onRefreshFun={this.onRefresh}
                         onEndReached={this.onEndReached}
-                        isRefresh={this.state.isRefresh}
+                        isRefresh={this.props.isRefreshing}
                         renderItem={this.renderRow.bind(this)}
                         isShowLoadMore={true}
                     />
@@ -122,6 +125,7 @@ function mapStateToProps(store) {
     const SSCHistoryListReducer = store.SSCHistoryListReducer.toJS();
     return {
         isRefreshing: SSCHistoryListReducer.isRefreshing,
+        isLoading: SSCHistoryListReducer.isLoading,
         historyItems: SSCHistoryListReducer.historyItems,
         hasNextPage: SSCHistoryListReducer.hasNextPage,
         isEmpty: SSCHistoryListReducer.isEmpty,
@@ -132,6 +136,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(SSCListActions.refreshAction()),
+        loadingAction: () => dispatch(SSCListActions.loadingAction()),
         getLatestTwentyAwards: (gameEn, periodName) => dispatch(SSCListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(SSCListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         clearData: () => dispatch(SSCListActions.clearDataAction()),

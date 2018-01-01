@@ -1,5 +1,5 @@
 import React from "react";
-import {FlatList, View} from "react-native";
+import {View} from "react-native";
 import {connect} from "react-redux";
 import SSQCell from "../../components/TabHistoryCells/ssqcell";
 import DLTCell from "../../components/TabHistoryCells/dltcell";
@@ -19,8 +19,6 @@ import JCZQCell from "../../components/TabHistoryCells/jczqcell";
 import JCLQCell from "../../components/TabHistoryCells/jclqcell";
 import SFGGCell from "../../components/TabHistoryCells/sfggcell";
 import ZQDCCell from "../../components/TabHistoryCells/zqdccell";
-import CommonNaviBar from "../../components/Views/CommonNaviBar";
-import HistoryawardsPushSettingsView from "../../components/Views/HistoryawardsPushSettingsView";
 import * as TabHistoryHallActions from "../../actions/history/TabHall";
 import BaseComponent from "../../components/Views/BaseComponent";
 import HallNoticeView from "../../components/Views/HallNoticeView";
@@ -328,7 +326,6 @@ class TabHistoryHall extends BaseComponent {
     render() {
         return (
             <View style={{flex: 1}}>
-                <CommonNaviBar middleTitle="开奖信息" leftHidden rightView={<HistoryawardsPushSettingsView />}/>
                 {this.renderNotice()}
                 {this.renderContent()}
             </View>
@@ -338,7 +335,6 @@ class TabHistoryHall extends BaseComponent {
 
 // 选择store中的state注入props
 function mapStateToProps(store) {
-    //const store = Immutable.toJS();
     let tabHistoryHallReducer = store.tabHistoryHallReducer.toJS();
     return {
         initLoading: tabHistoryHallReducer.initLoading,

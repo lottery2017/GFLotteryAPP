@@ -17,10 +17,12 @@ class K3HistoryList extends BaseComponent {
     static propTypes = {
         gameEn: PropTypes.string,
         isRefreshing: PropTypes.bool,
+        isLoading: PropTypes.bool,
         historyItems: PropTypes.array,
         hasNextPage: PropTypes.bool,
         isEmpty: PropTypes.bool,
         refreshAction: PropTypes.func.isRequired,
+        loadingAction: PropTypes.func.isRequired,
         getLatestTwentyAwards: PropTypes.func.isRequired,
         clearData: PropTypes.func.isRequired,
         getNextPageAwards: PropTypes.func.isRequired,
@@ -28,6 +30,7 @@ class K3HistoryList extends BaseComponent {
 
     static defaultProps = {
         isRefreshing: false,
+        isLoading: false,
         historyItems: [],
         hasNextPage: false,
         isEmpty: true,
@@ -43,13 +46,12 @@ class K3HistoryList extends BaseComponent {
     }
 
     componentDidMount() {
-        this.props.refreshAction();
+        this.props.loadingAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.isRefreshing) {
-            this.setState({isRefresh: false});
         }
         if (nextProps.historyItems.length > 0) {
             this.flatList.setLoadMoreStatus(LoadMoreStatus.idle);
@@ -62,6 +64,7 @@ class K3HistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
+        this.props.refreshAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
@@ -81,8 +84,8 @@ class K3HistoryList extends BaseComponent {
         this.renderRow = this.renderRow.bind(this);
     }
 
-    renderRow(rowData, sectionID, rowID) {
-        return (<K3Cell gameEn={this.state.gameEn} rowData={rowData} row={rowID} cellStyle="historyList"/>);
+    renderRow({item,index}) {
+        return (<K3Cell gameEn={this.state.gameEn} rowData={item.value} row={index} cellStyle="historyList"/>);
     }
 
     render() {
@@ -103,10 +106,10 @@ class K3HistoryList extends BaseComponent {
                             this.flatList = ref;
                         }}
                         data={dataBlob}
-                        initLoading={this.props.isRefreshing}
+                        initLoading={this.props.isLoading}
                         onRefreshFun={this.onRefresh}
                         onEndReached={this.onEndReached}
-                        isRefresh={this.state.isRefresh}
+                        isRefresh={this.props.isRefreshing}
                         renderItem={this.renderRow.bind(this)}
                         isShowLoadMore={true}
                     />
@@ -122,6 +125,7 @@ function mapStateToProps(store) {
     const K3HistoryListReducer = store.K3HistoryListReducer.toJS();
     return {
         isRefreshing: K3HistoryListReducer.isRefreshing,
+        isLoading: K3HistoryListReducer.isLoading,
         historyItems: K3HistoryListReducer.historyItems,
         hasNextPage: K3HistoryListReducer.hasNextPage,
         isEmpty: K3HistoryListReducer.isEmpty,
@@ -132,6 +136,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(K3ListActions.refreshAction()),
+        loadingAction: () => dispatch(K3ListActions.loadingAction()),
         getLatestTwentyAwards: (gameEn, periodName) => dispatch(K3ListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(K3ListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         clearData: () => dispatch(K3ListActions.clearDataAction()),

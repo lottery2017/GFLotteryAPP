@@ -4,6 +4,7 @@
  * @flow
  */
 import React, {Component} from "react";
+import {BackHandler, ToastAndroid} from "react-native";
 import {connect, Provider} from "react-redux";
 import {addNavigationHelpers} from "react-navigation";
 import {AppNavigator} from "./routers";
@@ -19,6 +20,21 @@ const mapStateToProps = (state) => ({
 });
 
 class App extends Component {
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this._onBackAndroid);
+    }
+
+    _onBackAndroid = () => {
+            if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+                //最近2秒内按过back键，可以退出应用。
+// BackHandler.exitApp()
+                return false
+            }
+            this.lastBackPressed = Date.now();
+            ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+            return true;
+        }
+    
     render() {
         return (
             <AppNavigator

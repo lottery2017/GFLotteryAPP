@@ -1,10 +1,9 @@
-import { createAction } from 'redux-actions';
-import { NativeModules } from 'react-native';
-import * as types from '../../ActionTypes';
-import * as X3DHistoryListService from '../../../service/history/x3d';
-import * as helper from '../../../components/HistoryListHeader/helper';
+import {createAction} from "redux-actions";
+import * as types from "../../ActionTypes";
+import * as X3DHistoryListService from "../../../service/history/x3d";
 
 export const refreshAction = createAction(types.X3DHISTORYLIST_REFRESHING);
+export const loadingAction = createAction(types.X3DHISTORYLIST_LOADING);
 export const clearDataAction = createAction(types.X3DHISTORYLIST_CLEARDATA);// 清空数据
 
 // 获得最近的20条数据
@@ -38,20 +37,5 @@ export const getNextPageAwards = createAction(types.X3DHISTORYLIST_GETNEXTPAGE,
 export function getNextPageAwardsAction(gameEn, lastPeriod) {
   return async (dispatch) => {
     dispatch(getNextPageAwards(gameEn, lastPeriod));
-  };
-}
-
-const getHeaderLabelString = createAction(types.X3DHISTORYLIST_HEADERDISPLAY,
-async (gameEn) => {
-  const headerLabelString = await helper.headerLabelStringForGameEn(gameEn);
-  return {
-    headerLabelString: headerLabelString,
-  };
-});
-// 获得列表头部展示的数据
-
-export function getHeaderLabelStringAction(gameEn) {
-  return async (dispatch) => {
-    dispatch(getHeaderLabelString(gameEn));
   };
 }

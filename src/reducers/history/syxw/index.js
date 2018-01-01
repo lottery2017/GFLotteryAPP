@@ -8,6 +8,7 @@ const defaultUserState = Immutable.fromJS({
     historyItems: [],
     hasNextPage: true,
     isEmpty: false,
+    isLoading: false,
 });
 
 export default function SYXWHistoryList(state = defaultUserState, action) {
@@ -16,9 +17,14 @@ export default function SYXWHistoryList(state = defaultUserState, action) {
             return state.merge({
                 isRefreshing: true,
             });
+        case types.SYXWHISTORYLIST_LOADING:
+            return state.merge({
+                isLoading: true,
+            });
         case types.SYXWHISTORYLIST_REFRESHLIST:
             return state.merge({
                 isRefreshing: false,
+                isLoading: false,
                 historyItems: action.payload.latestTwentyItems,
                 hasNextPage: action.payload.latestTwentyItems.length >= 20,
                 isEmpty: action.payload.latestTwentyItems.length <= 0,
@@ -26,6 +32,7 @@ export default function SYXWHistoryList(state = defaultUserState, action) {
         case types.SYXWHISTORYLIST_GETNEXTPAGE:
             return state.merge({
                 isRefreshing: false,
+                isLoading: false,
                 hasNextPage: action.payload.nextPageItems.length === 10 &&
                 state.get('historyItems').size + action.payload.nextPageItems.length < MAX_SAVE_PERIODS,
                 historyItems: action.payload.nextPageItems.length > 0 ?
@@ -33,8 +40,7 @@ export default function SYXWHistoryList(state = defaultUserState, action) {
                     state.get('historyItems'),
             });
         case types.SYXWHISTORYLIST_CLEARDATA:
-            return Immutable.fromJS({
-            });
+            return Immutable.fromJS({});
         default:
             return state;
     }

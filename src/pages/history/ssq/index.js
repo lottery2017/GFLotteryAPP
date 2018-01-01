@@ -16,10 +16,8 @@ class SSQHistoryList extends BaseComponent {
         historyItems: PropTypes.array,
         hasNextPage: PropTypes.bool,
         isEmpty: PropTypes.bool,
-        headerLabelString: PropTypes.string,
         refreshAction: PropTypes.func.isRequired,
         getLatestTwentyAwards: PropTypes.func.isRequired,
-        getHeaderLabelString: PropTypes.func.isRequired,
         clearData: PropTypes.func.isRequired,
         getNextPageAwards: PropTypes.func.isRequired,
         loadingAction:PropTypes.func.isRequired,
@@ -30,7 +28,6 @@ class SSQHistoryList extends BaseComponent {
         isLoading: false,
         historyItems: [],
         hasNextPage: false,
-        headerLabelString: '',
         isEmpty: true,
     };
 
@@ -46,7 +43,6 @@ class SSQHistoryList extends BaseComponent {
     componentDidMount() {
         this.props.loadingAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
-        this.props.getHeaderLabelString(this.state.gameEn);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -131,7 +127,6 @@ function mapStateToProps(store) {
         isRefreshing: SSQHistoryListReducer.isRefreshing,
         isLoading: SSQHistoryListReducer.isLoading,
         historyItems: SSQHistoryListReducer.historyItems,
-        headerLabelString: SSQHistoryListReducer.headerLabelString,
         hasNextPage: SSQHistoryListReducer.hasNextPage,
         isEmpty: SSQHistoryListReducer.isEmpty,
     };
@@ -144,7 +139,6 @@ function mapDispatchToProps(dispatch) {
         loadingAction: () => dispatch(SSQListActions.loadingAction()),
         getLatestTwentyAwards: (gameEn, periodName) => dispatch(SSQListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(SSQListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
-        getHeaderLabelString: gameEn => dispatch(SSQListActions.getHeaderLabelStringAction(gameEn)),
         clearData: () => dispatch(SSQListActions.clearDataAction()),
     };
 }

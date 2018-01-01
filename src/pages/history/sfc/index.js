@@ -13,10 +13,12 @@ class SFCHistoryList extends BaseComponent {
     static propTypes = {
         gameEn: PropTypes.string,
         isRefreshing: PropTypes.bool,
+        isLoading: PropTypes.bool,
         historyItems: PropTypes.array,
         hasNextPage: PropTypes.bool,
         isEmpty: PropTypes.bool,
         refreshAction: PropTypes.func.isRequired,
+        loadingAction: PropTypes.func.isRequired,
         getLatestTwentyAwards: PropTypes.func.isRequired,
         clearData: PropTypes.func.isRequired,
         getNextPageAwards: PropTypes.func.isRequired,
@@ -24,6 +26,7 @@ class SFCHistoryList extends BaseComponent {
 
     static defaultProps = {
         isRefreshing: false,
+        isLoading: false,
         historyItems: [],
         hasNextPage: false,
         isEmpty: true,
@@ -39,13 +42,12 @@ class SFCHistoryList extends BaseComponent {
     }
 
     componentDidMount() {
-        this.props.refreshAction();
+        this.props.loadingAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.isRefreshing) {
-            this.setState({isRefresh: false});
         }
         if (nextProps.historyItems.length > 0) {
             this.flatList.setLoadMoreStatus(LoadMoreStatus.idle);
@@ -58,6 +60,7 @@ class SFCHistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
+        this.props.refreshAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
@@ -77,9 +80,9 @@ class SFCHistoryList extends BaseComponent {
         this.renderRow = this.renderRow.bind(this);
     }
 
-    renderRow(rowData, sectionID, rowID) {
+    renderRow({item,index}) {
         return (
-            <SFCCell gameEn={this.state.gameEn} rowData={rowData} row={rowID} cellStyle="historyList"/>
+            <SFCCell gameEn={this.state.gameEn} rowData={item.value} row={index} cellStyle="historyList"/>
         );
     }
 
@@ -101,10 +104,10 @@ class SFCHistoryList extends BaseComponent {
                             this.flatList = ref;
                         }}
                         data={dataBlob}
-                        initLoading={this.props.isRefreshing}
+                        initLoading={this.props.isLoading}
                         onRefreshFun={this.onRefresh}
                         onEndReached={this.onEndReached}
-                        isRefresh={this.state.isRefresh}
+                        isRefresh={this.state.isRefreshing}
                         renderItem={this.renderRow.bind(this)}
                         isShowLoadMore={true}
                     />
@@ -120,6 +123,7 @@ function mapStateToProps(store) {
     const SFCHistoryListReducer = store.SFCHistoryListReducer.toJS();
     return {
         isRefreshing: SFCHistoryListReducer.isRefreshing,
+        isLoading: SFCHistoryListReducer.isLoading,
         historyItems: SFCHistoryListReducer.historyItems,
         hasNextPage: SFCHistoryListReducer.hasNextPage,
         isEmpty: SFCHistoryListReducer.isEmpty,
@@ -130,6 +134,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(SFCListActions.refreshAction()),
+        loadingAction: () => dispatch(SFCListActions.loadingAction()),
         getLatestTwentyAwards: (gameEn, periodName) => dispatch(SFCListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(SFCListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         clearData: () => dispatch(SFCListActions.clearDataAction()),

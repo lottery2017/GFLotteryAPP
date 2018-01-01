@@ -4,6 +4,7 @@ import * as types from '../../ActionTypes';
 import * as SSCHistoryListService from '../../../service/history/ssc';
 
 export const refreshAction = createAction(types.SSCHISTORYLIST_REFRESHING);
+export const loadingAction = createAction(types.SSCHISTORYLIST_LOADING);
 export const clearDataAction = createAction(types.SSCHISTORYLIST_CLEARDATA);// 清空数据
 
 // 获得最近的20条数据

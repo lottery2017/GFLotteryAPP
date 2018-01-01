@@ -73,7 +73,7 @@ export default function LotteryToolBar(props) {
           <TouchableOpacity
             style={styles.touchableOpacityBet}
             onPress={() => {
-              NativeModules.LDRNBridge.routeWithURL(`rrzcp://bet?g=${props.gameEn}`, {});
+             // NativeModules.LDRNBridge.routeWithURL(`rrzcp://bet?g=${props.gameEn}`, {})
             }}
           >
             <Text style={styles.textdBet}>
@@ -123,7 +123,7 @@ export default function LotteryToolBar(props) {
           <TouchableOpacity
             style={styles.touchableOpacityd11}
             onPress={() => {
-              NativeModules.LDRNBridge.routeWithURL(`rrzcp://bet?g=${props.gameEn}`, {});
+              //NativeModules.LDRNBridge.routeWithURL(`rrzcp://bet?g=${props.gameEn}`, {});
             }}
           >
             <Text style={styles.textd11}>
@@ -138,7 +138,7 @@ export default function LotteryToolBar(props) {
           <TouchableOpacity
             style={styles.touchableOpacityBet}
             onPress={() => {
-              NativeModules.LDRNBridge.routeWithURL(`rrzcp://bet?g=${props.gameEn}`, {});
+              //NativeModules.LDRNBridge.routeWithURL(`rrzcp://bet?g=${props.gameEn}`, {});
             }}
           >
             <Text style={styles.textdBet}>
@@ -148,7 +148,7 @@ export default function LotteryToolBar(props) {
           <TouchableOpacity
             style={styles.touchableOpacityQuery}
             onPress={() => {
-              NativeModules.LDRNBridge.routeWithURL('rrzcp://bet?g=football_9', {});
+             // NativeModules.LDRNBridge.routeWithURL('rrzcp://bet?g=football_9', {});
             }}
           >
             <Text style={styles.textQuery}>

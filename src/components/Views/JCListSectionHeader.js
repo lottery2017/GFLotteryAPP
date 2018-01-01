@@ -9,31 +9,7 @@ import {
 import BaseComponent from '../Views/BaseComponent';
 import PropTypes from 'prop-types';
 const styles = StyleSheet.create({
-  rootTouchableWithoutFeedback: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 29,
-    backgroundColor: 'white',
-  },
-  touchableWithoutFeedback_view: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    height: 29,
-  },
-  titleText: {
-    color: '#3c3e45',
-    fontSize: 14,
-  },
-  arrowView: {
-    position: 'absolute',
-    top: 4.5,
-    right: 23,
-    width: 20,
-    height: 20,
-  },
+
 });
 export default class JCListSectionHeader extends BaseComponent {
   static propTypes = {

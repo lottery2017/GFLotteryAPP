@@ -1,17 +1,8 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  NativeModules,
-  TouchableOpacity,
-  Dimensions,
-    ImageBackground
-} from 'react-native';
-import * as helper from './helper';
-import BaseComponent from '../Views/BaseComponent';
-import PropTypes from 'prop-types';
+import React from "react";
+import {Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import * as helper from "./helper";
+import BaseComponent from "../Views/BaseComponent";
+import PropTypes from "prop-types";
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const X_SCALE = SCREEN_WIDTH / 320.0;
 const LINE_HEIGHT = 1;
@@ -31,7 +22,7 @@ export default class X3DCell extends BaseComponent {
     periodName: PropTypes.string,
     cellStyle: PropTypes.oneOf(['tabHall', 'historyList', 'detail']).isRequired,
     // 列表页需要
-    row: PropTypes.string,
+      row: PropTypes.number,
     rowData: PropTypes.object,
   };
   static defaultProps = {
@@ -41,7 +32,7 @@ export default class X3DCell extends BaseComponent {
     extra: '',
     gameEn: 'x3d',
     // 列表页需要
-    row: '',
+      row: 0,
     rowData: null,
   }
   render() {
@@ -58,10 +49,6 @@ export default class X3DCell extends BaseComponent {
     if (this.props.cellStyle === 'tabHall') {
       if (this.props.awardNo) {
         const awardNoArr = getAwardNoArray(this.props.awardNo);
-        const route = () => {
-          NativeModules.LDRNBridge.routeWithURL('reactnative',
-            { moduleName: 'X3DHistoryList', showStyle: 'push', hideTabbar: true, properties: { gameEn: 'x3d' } });
-        };
         return (
           <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{ height: 87 * X_SCALE, flexDirection: 'row', backgroundColor: 'white', alignItems: 'center', justifyContent: 'space-between' }}>
             <View style={{ height: 87 * X_SCALE, justifyContent: 'space-between' }}>
@@ -100,15 +87,18 @@ export default class X3DCell extends BaseComponent {
         </View>
       );
     } else if (this.props.cellStyle === 'historyList') {
-      const route = () => {
-        NativeModules.LDRNBridge.routeWithURL('awardDetailsList', { gameEn: this.props.gameEn, awardNo: this.props.rowData.awardNo, awardTime: this.props.rowData.awardTime, period: this.props.rowData.periodName, luckyBlue: this.props.rowData.luckyBlue, extra: this.props.rowData.extra });
-      };
       const awardNoArr = getAwardNoArray(this.props.rowData.awardNo);
-      const numBGImage = this.props.row === '0' ? require('../../../images/redBall.png') : require('../../../images/transparencyBall.png');
-      const textStyle = this.props.row === '0' ? styles.text : styles.nonFirstRowtext;
+        const numBGImage = this.props.row === 0 ? require('../../../images/redBall.png') : require('../../../images/transparencyBall.png');
+        const textStyle = this.props.row === 0 ? styles.text : styles.nonFirstRowtext;
       return (
         <View style={{ backgroundColor: 'white', justifyContent: 'space-between' }}>
-          <TouchableOpacity activeOpacity={1.0} onPress={route} style={{ height: 87 * X_SCALE, flexDirection: 'row', backgroundColor: 'white', alignItems: 'center', justifyContent: 'space-between' }}>
+          <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{
+              height: 87 * X_SCALE,
+              flexDirection: 'row',
+              backgroundColor: 'white',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+          }}>
             <View style={{ height: 87 * X_SCALE, justifyContent: 'space-between' }}>
               <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={{ marginLeft: 5, fontSize: 12, color: '#aaaaaa' }}>{getPeriodString(this.props.rowData.awardTime, this.props.rowData.periodName)}</Text>

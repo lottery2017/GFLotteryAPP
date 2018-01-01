@@ -14,10 +14,12 @@ class SYXWHistoryList extends BaseComponent {
     static propTypes = {
         gameEn: PropTypes.string,
         isRefreshing: PropTypes.bool,
+        isLoading: PropTypes.bool,
         historyItems: PropTypes.array,
         hasNextPage: PropTypes.bool,
         isEmpty: PropTypes.bool,
         refreshAction: PropTypes.func.isRequired,
+        loadingAction: PropTypes.func.isRequired,
         getLatestTwentyAwards: PropTypes.func.isRequired,
         clearData: PropTypes.func.isRequired,
         getNextPageAwards: PropTypes.func.isRequired,
@@ -25,6 +27,7 @@ class SYXWHistoryList extends BaseComponent {
 
     static defaultProps = {
         isRefreshing: false,
+        isLoading: false,
         historyItems: [],
         hasNextPage: false,
         isEmpty: true,
@@ -44,13 +47,12 @@ class SYXWHistoryList extends BaseComponent {
     });
 
     componentDidMount() {
-        this.props.refreshAction();
+        this.props.loadingAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.isRefreshing) {
-            this.setState({isRefresh: false});
         }
         if (nextProps.historyItems.length > 0) {
             this.flatList.setLoadMoreStatus(LoadMoreStatus.idle);
@@ -63,6 +65,7 @@ class SYXWHistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
+        this.props.refreshAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
@@ -82,8 +85,13 @@ class SYXWHistoryList extends BaseComponent {
         this.renderRow = this.renderRow.bind(this);
     }
 
-    renderRow(rowData, sectionID, rowID) {
-        return (<SYXWCell gameEn={this.state.gameEn} rowData={rowData} row={rowID} cellStyle="historyList"/>);
+    renderRow({item, index}) {
+        return (
+            <SYXWCell
+                gameEn={this.state.gameEn}
+                rowData={item.value}
+                row={index}
+                cellStyle="historyList"/>);
     }
 
     render() {
@@ -104,10 +112,10 @@ class SYXWHistoryList extends BaseComponent {
                             this.flatList = ref;
                         }}
                         data={dataBlob}
-                        initLoading={this.props.isRefreshing}
+                        initLoading={this.props.isLoading}
                         onRefreshFun={this.onRefresh}
                         onEndReached={this.onEndReached}
-                        isRefresh={this.state.isRefresh}
+                        isRefresh={this.props.isRefreshing}
                         renderItem={this.renderRow.bind(this)}
                         isShowLoadMore={true}
                     />
@@ -123,6 +131,7 @@ function mapStateToProps(store) {
     const SYXWHistoryListReducer = store.SYXWHistoryListReducer.toJS();
     return {
         isRefreshing: SYXWHistoryListReducer.isRefreshing,
+        isLoading: SYXWHistoryListReducer.isLoading,
         historyItems: SYXWHistoryListReducer.historyItems,
         hasNextPage: SYXWHistoryListReducer.hasNextPage,
         isEmpty: SYXWHistoryListReducer.isEmpty,
@@ -133,6 +142,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(SYXWListActions.refreshAction()),
+        loadingAction: () => dispatch(SYXWListActions.loadingAction()),
         getLatestTwentyAwards: (gameEn, periodName) => dispatch(SYXWListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(SYXWListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
         clearData: () => dispatch(SYXWListActions.clearDataAction()),

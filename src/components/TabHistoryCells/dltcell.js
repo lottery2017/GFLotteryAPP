@@ -62,10 +62,6 @@ export default class DLTCell extends BaseComponent {
         };
         if (this.props.cellStyle === 'tabHall') {
             const awardNoArr = getAwardNoArray(this.props.awardNo);
-            const route = () => {
-                NativeModules.LDRNBridge.routeWithURL('reactnative',
-                    {moduleName: 'DLTHistoryList', showStyle: 'push', hideTabbar: true, properties: {gameEn: 'dlt'}});
-            };
             if (this.props.awardNo) {
                 return (
                     <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{
@@ -131,21 +127,11 @@ export default class DLTCell extends BaseComponent {
                 </View>
             );
         } else if (this.props.cellStyle === 'historyList') {
-            const route = () => {
-                NativeModules.LDRNBridge.routeWithURL('awardDetailsList', {
-                    gameEn: this.props.gameEn,
-                    awardNo: this.props.rowData.awardNo,
-                    awardTime: this.props.rowData.awardTime,
-                    period: this.props.rowData.periodName,
-                    luckyBlue: this.props.rowData.luckyBlue,
-                    extra: this.props.rowData.extra
-                });
-            };
             const awardNoArr = getAwardNoArray(this.props.rowData.awardNo);
             if (this.props.row === 0) {
                 return (
                     <View style={{backgroundColor: 'white', justifyContent: 'space-between'}}>
-                        <TouchableOpacity activeOpacity={1.0} onPress={route} style={{
+                        <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{
                             height: 87 * X_SCALE,
                             flexDirection: 'row',
                             backgroundColor: 'white',
@@ -187,7 +173,7 @@ export default class DLTCell extends BaseComponent {
             }
             return (
                 <View style={{backgroundColor: 'white', justifyContent: 'space-between'}}>
-                    <TouchableOpacity activeOpacity={1.0} onPress={route} style={{
+                    <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{
                         height: 87 * X_SCALE,
                         flexDirection: 'row',
                         backgroundColor: 'white',

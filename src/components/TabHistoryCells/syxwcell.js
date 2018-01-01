@@ -1,14 +1,5 @@
 import React from "react";
-import {
-    Dimensions,
-    Image,
-    ImageBackground,
-    NativeModules,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
-} from "react-native";
+import {Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import * as GlobalHelper from "../../utils/GlobalHelper";
 import * as helper from "./helper";
 import BaseComponent from "../Views/BaseComponent";
@@ -33,7 +24,7 @@ export default class SYXWCell extends BaseComponent {
         periodName: PropTypes.string,
         cellStyle: PropTypes.oneOf(['tabHall', 'historyList', 'detail']).isRequired,
         // 列表页需要
-        row: PropTypes.string,
+        row: PropTypes.number,
         rowData: PropTypes.object,
     };
     static defaultProps = {
@@ -42,7 +33,7 @@ export default class SYXWCell extends BaseComponent {
         awardTime: '',
         periodName: '',
         // 列表页需要
-        row: '',
+        row: 0,
         rowData: null,
     };
 
@@ -115,21 +106,11 @@ export default class SYXWCell extends BaseComponent {
                 </View>
             );
         } else if (this.props.cellStyle === 'historyList') {
-            const route = () => {
-                NativeModules.LDRNBridge.routeWithURL('awardDetailsList', {
-                    gameEn: this.props.gameEn,
-                    awardNo: this.props.rowData.awardNo,
-                    awardTime: this.props.rowData.awardTime,
-                    period: this.props.rowData.periodName,
-                    luckyBlue: this.props.rowData.luckyBlue,
-                    extra: this.props.rowData.extra
-                });
-            };
             const awardNoArr = getAwardNoArray(this.props.rowData.awardNo);
-            if (this.props.row === '0') {
+            if (this.props.row === 0) {
                 return (
                     <View style={{backgroundColor: 'white', justifyContent: 'space-between'}}>
-                        <TouchableOpacity activeOpacity={1.0} onPress={route} style={{
+                        <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{
                             height: 87 * X_SCALE,
                             flexDirection: 'row',
                             backgroundColor: 'white',
@@ -163,7 +144,7 @@ export default class SYXWCell extends BaseComponent {
             }
             return (
                 <View style={{backgroundColor: 'white', justifyContent: 'space-between'}}>
-                    <TouchableOpacity activeOpacity={1.0} onPress={route} style={{
+                    <TouchableOpacity activeOpacity={1.0} onPress={this.props.onPress} style={{
                         height: 87 * X_SCALE,
                         flexDirection: 'row',
                         backgroundColor: 'white',

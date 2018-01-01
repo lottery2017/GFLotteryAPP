@@ -7,7 +7,6 @@ import {View} from "react-native";
 import {connect} from "react-redux";
 import X3DCell from "../../../components/TabHistoryCells/x3dcell";
 import * as X3DListActions from "../../../actions/history/x3d";
-import HistoryListHeader from "../../../components/HistoryListHeader/HistoryListHeader";
 import LotteryToolBar from "../../../components/Views/LotteryToolBar";
 import {LoadMoreStatus} from "../../../components/Views/GFRefresh/GFScroll/index";
 import BaseComponent from "../../../components/Views/BaseComponent";
@@ -17,22 +16,22 @@ class X3DHistoryList extends BaseComponent {
     static propTypes = {
         gameEn: PropTypes.string,
         isRefreshing: PropTypes.bool,
+        isLoading: PropTypes.bool,
         historyItems: PropTypes.array,
         hasNextPage: PropTypes.bool,
-        headerLabelString: PropTypes.string,
         isEmpty: PropTypes.bool,
         refreshAction: PropTypes.func.isRequired,
+        loadingAction: PropTypes.func.isRequired,
         getLatestTwentyAwards: PropTypes.func.isRequired,
-        getHeaderLabelString: PropTypes.func.isRequired,
         clearData: PropTypes.func.isRequired,
         getNextPageAwards: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
         isRefreshing: false,
+        isLoading: false,
         historyItems: [],
         hasNextPage: false,
-        headerLabelString: '',
         isEmpty: true,
     };
 
@@ -46,14 +45,12 @@ class X3DHistoryList extends BaseComponent {
     }
 
     componentDidMount() {
-        this.props.refreshAction();
+        this.props.loadingAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
-        this.props.getHeaderLabelString(this.state.gameEn);
     }
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.isRefreshing) {
-            this.setState({isRefresh: false});
         }
         if (nextProps.historyItems.length > 0) {
             this.flatList.setLoadMoreStatus(LoadMoreStatus.idle);
@@ -69,6 +66,7 @@ class X3DHistoryList extends BaseComponent {
 
     // 下拉刷新
     onRefresh() {
+        this.props.refreshAction();
         this.props.getLatestTwentyAwards(this.state.gameEn, this.state.periodName);
     }
 
@@ -82,28 +80,22 @@ class X3DHistoryList extends BaseComponent {
     }
 
     functionBindThis() {
-        this.renderHeader = this.renderHeader.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
         this.renderRow = this.renderRow.bind(this);
         this.onEndReached = this.onEndReached.bind(this);
     }
 
-    renderRow(rowData, sectionID, rowID) {
+    renderRow({item, index}) {
         return (
             <X3DCell
                 gameEn={this.state.gameEn}
-                rowData={rowData}
-                row={rowID}
+                rowData={item.value}
+                row={index}
                 cellStyle="historyList"
             />
         );
     }
 
-    renderHeader() {
-        return (
-            <HistoryListHeader headerLabelString={this.props.headerLabelString}/>
-        );
-    }
 
     render() {
         let dataBlob = [];
@@ -123,10 +115,10 @@ class X3DHistoryList extends BaseComponent {
                             this.flatList = ref;
                         }}
                         data={dataBlob}
-                        initLoading={this.props.isRefreshing}
+                        initLoading={this.props.isLoading}
                         onRefreshFun={this.onRefresh}
                         onEndReached={this.onEndReached}
-                        isRefresh={this.state.isRefresh}
+                        isRefresh={this.props.isRefreshing}
                         renderItem={this.renderRow.bind(this)}
                         isShowLoadMore={true}
                     />
@@ -140,22 +132,22 @@ class X3DHistoryList extends BaseComponent {
 // 选择store中的state注入props
 function mapStateToProps(store) {
     const X3DHistoryListReducer = store.X3DHistoryListReducer.toJS();
-    return {
-        isRefreshing: X3DHistoryListReducer.isRefreshing,
-        historyItems: X3DHistoryListReducer.historyItems,
-        headerLabelString: X3DHistoryListReducer.headerLabelString,
-        hasNextPage: X3DHistoryListReducer.hasNextPage,
-        isEmpty: X3DHistoryListReducer.isEmpty,
-    };
+        return {
+            isRefreshing: X3DHistoryListReducer.isRefreshing,
+            isLoading: X3DHistoryListReducer.isLoading,
+            historyItems: X3DHistoryListReducer.historyItems,
+            hasNextPage: X3DHistoryListReducer.hasNextPage,
+            isEmpty: X3DHistoryListReducer.isEmpty,
+        };
 }
 
 // 选择注入到prop中的回调方法
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(X3DListActions.refreshAction()),
+        loadingAction: () => dispatch(X3DListActions.loadingAction()),
         getLatestTwentyAwards: (gameEn, periodName) => dispatch(X3DListActions.getRefreshDataAction(gameEn, periodName)),
         getNextPageAwards: (gameEn, lastPeriod) => dispatch(X3DListActions.getNextPageAwardsAction(gameEn, lastPeriod)),
-        getHeaderLabelString: gameEn => dispatch(X3DListActions.getHeaderLabelStringAction(gameEn)),
         clearData: () => dispatch(X3DListActions.clearDataAction()),
     };
 }

@@ -1,29 +1,35 @@
-import React from 'react';
-import {View, ListView, DatePickerAndroid, Platform} from 'react-native';
-import {connect} from 'react-redux';
-import JCZQCell from '../../../components/HistoryListCells/HistoryListJCZQCell';
-import * as JCZQListActions from '../../../actions/history/jczq';
-import OddsHintView from '../../../components/Views/OddsHintView';
-import LotteryToolBar from '../../../components/Views/LotteryToolBar';
-import CommonNaviBar from '../../../components/Views/CommonNaviBar';
-import JCHistoryListBarDateView from '../../../components/Views/JCHistoryListBarDateView';
-import DatePickerView from '../../../components/Views/DatePickerView';
-import JCListSectionHeader from '../../../components/Views/JCListSectionHeader';
-import * as GlobalHelper from '../../../utils/GlobalHelper';
-import BaseComponent from '../../../components/Views/BaseComponent';
-import PropTypes from 'prop-types';
+import React from "react";
+import {DatePickerAndroid, FlatList, Platform, View} from "react-native";
+import {connect} from "react-redux";
+import JCZQCell from "../../../components/HistoryListCells/HistoryListJCZQCell";
+import * as JCZQListActions from "../../../actions/history/jczq";
+import * as GlobalHelper from "../../../utils/GlobalHelper";
+import BaseComponent from "../../../components/Views/BaseComponent";
+import PropTypes from "prop-types";
+import OddsHintView from "../../../components/Views/OddsHintView";
+import DatePickerView from "../../../components/Views/DatePickerView";
+import JCHistoryListBarDateView from "../../../components/Views/JCHistoryListBarDateView";
+import LotteryToolBar from "../../../components/Views/LotteryToolBar";
+import {GFRefreshFlatList} from "../../../components/Views/GFRefresh/GFRefreshFlatList";
+import CollapsableView from "../../../components/HistoryListCells/CollapsableView";
 class JCZQHistoryList extends BaseComponent {
+    static navigationOptions = ({navigation, screenProps}) => ({
+        headerRight: (
+            <JCHistoryListBarDateView onPress={() => navigation.state.params.rightAction() }/> ),
+    });
     static propTypes = {
         gameEn: PropTypes.string,
         sectionsInfo: PropTypes.array,
         requestDate: PropTypes.instanceOf(Date),
         isRefreshing: PropTypes.bool,
+        isLoading: PropTypes.bool,
         lastest3DaysItems: PropTypes.array,
         isEmpty: PropTypes.bool,
         datePickerShow: PropTypes.bool,
         sectionsStatus: PropTypes.object,
         resetHeader: PropTypes.bool,
         refreshAction: PropTypes.func.isRequired,
+        loadingAction: PropTypes.func.isRequired,
         getLatestDayAwards: PropTypes.func.isRequired,
         clearData: PropTypes.func.isRequired,
         sectionHeaderClicked: PropTypes.func.isRequired,
@@ -34,6 +40,7 @@ class JCZQHistoryList extends BaseComponent {
     static defaultProps = {
         requestDate: new Date(),
         isRefreshing: false,
+        isLoading: false,
         sectionsInfo: [],
         lastest3DaysItems: [],
         isEmpty: true,
@@ -51,22 +58,35 @@ class JCZQHistoryList extends BaseComponent {
     }
 
     componentDidMount() {
-        this.props.refreshAction();
+        this.props.navigation.setParams({rightAction: () => this.rightAction()});
+        this.props.loadingAction();
         this.props.getLatestDayAwards(this.state.gameEn, this.props.requestDate);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (!nextProps.isRefreshing) {
-            this.listView.endRefresh();
-        }
     }
 
     componentWillUnmount() {
         this.props.clearData();
     }
+    //点击日期按键
+    rightAction() {
+        Platform.OS === 'android' ? this.showAndDatePicker() : this.props.barDateClicked();
+    }
 
+    async showAndDatePicker() {
+        try {
+            const {action, year, month, day} = await DatePickerAndroid.open({
+                date: this.props.requestDate,
+            });
+            if (action !== DatePickerAndroid.dismissedAction) {
+                const newDate = new Date(year, month, day);
+                this.datePickerConfirmClicked(newDate);
+            }
+        } catch ({code, message}) {
+            // console.warn('Cannot open date picker', message);
+        }
+    };
     // 下拉刷新
     onRefresh() {
+        this.props.refreshAction();
         this.props.getLatestDayAwards(this.state.gameEn, this.props.requestDate);
     }
 
@@ -84,13 +104,11 @@ class JCZQHistoryList extends BaseComponent {
     }
 
     datePickerConfirmClicked(date) {
-        this.props.refreshAction();
+        this.props.loadingAction();
         this.props.getLatestDayAwards(this.state.gameEn, date);
     }
 
     sectionHeaderClicked(sectionId, sectionStatus) {
-        // 保证sectionheader 正确渲染
-        this.listView.scrollDownOnePix();
         this.props.sectionHeaderClicked(sectionId, sectionStatus);
     }
 
@@ -101,77 +119,59 @@ class JCZQHistoryList extends BaseComponent {
         return false;
     }
 
-    renderRow(rowData, sectionID) {
-        if (this.sectionNeedFold(sectionID)) {
+
+    renderRow({item, index}) {
+        if (this.sectionNeedFold(index)) {
             return null;
         }
         return (
-            <JCZQCell rowData={rowData}/>
+            <JCZQCell rowData={item.value}/>
         );
     }
 
-    renderSectionHeader(sectionData, sectionId) {
-        const title = this.getHeaderTitle(sectionId);
+    renderSectionHeader({item, index}) {
+        let dataBlob = [];
+        let i = 0;
+        this.props.lastest3DaysItems[index].awardMatchList.map(function (item) {
+            dataBlob.push({
+                key: i,
+                value: item,
+            });
+            i++;
+        });
+        const title = this.getHeaderTitle(index);
         return (
-            <JCListSectionHeader
-                key={title}
+            <CollapsableView
                 text={title}
-                sectionId={sectionId}
-                onClicked={this.sectionHeaderClicked}
-                resetHeader={this.props.resetHeader}
-            />
+            >
+                <FlatList
+                    data={dataBlob}
+                    renderItem={this.renderRow.bind(this)}/>
+            </CollapsableView>
         );
     }
 
     render() {
-        const showAndDatePicker = async () => {
-            try {
-                const {action, year, month, day} = await DatePickerAndroid.open({
-                    date: this.props.requestDate,
-                });
-                if (action !== DatePickerAndroid.dismissedAction) {
-                    const newDate = new Date(year, month, day);
-                    this.datePickerConfirmClicked(newDate);
-                }
-            } catch ({code, message}) {
-                // console.warn('Cannot open date picker', message);
-            }
-        };
-
-        const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID];
-        const getRowData = (dataBlob, sectionID, rowID) => dataBlob[`${sectionID}:${rowID}`];
-
-        const dataSource = new ListView.DataSource({
-            getSectionData: (dataBlob, sectionID) => getSectionData(dataBlob, sectionID), // 获取组中数据
-            getRowData: (dataBlob, sectionID, rowID) => getRowData(dataBlob, sectionID, rowID), // 获取行中的数据
-            rowHasChanged: (r1, r2) => r1 !== r2,
-            sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+        let dataBlob = [];
+        let i = 0;
+        this.props.sectionsInfo.map(function (item) {
+            dataBlob.push({
+                key: i,
+                value: item,
+            });
+            i++;
         });
-        const {dataBlob, sectionIDs, rowIDs, firstSectionLength} =
-            GlobalHelper.handleSectionListViewData(this.props.lastest3DaysItems);
-
         return (
-            <View style={{flex: 1}}>
-              {/*  <CommonNaviBar middleTitle="竞彩足球" rightView={<JCHistoryListBarDateView />}
-                               rightAction={Platform.OS === 'android' ? showAndDatePicker : this.props.barDateClicked}/>
+            <View style={{flex: 1, backgroundColor: '#f1f1f1'}}>
                 <OddsHintView />
-
-                <LDCPHistoryListView
-                    ref={(ref) => {
-                        this.listView = ref;
-                    }}
-                    automaticallyAdjustContentInsets={false}
-                    horizontal={false}
-                    initialListSize={Platform.OS === 'android' ? 5 : firstSectionLength}
-                    renderRow={this.renderRow}
-                    isRefreshing={this.props.isRefreshing}
-                    dataSource={dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs)}
-                     renderSectionHeader={this.renderSectionHeader}
-                     onRefresh={this.onRefresh}
-                     empty={this.props.isEmpty}
-                     //isSectionStyle
+                <GFRefreshFlatList
+                    data={dataBlob}
+                    initLoading={this.props.isLoading}
+                    onRefreshFun={this.onRefresh}
+                    isRefresh={this.props.isRefreshing}
+                    renderItem={this.renderSectionHeader.bind(this)}
+                    isShowLoadMore={false}
                 />
-
                 {
                     this.props.datePickerShow ? <DatePickerView
                         confirmClicked={this.datePickerConfirmClicked}
@@ -179,7 +179,7 @@ class JCZQHistoryList extends BaseComponent {
                     />
                         :
                         <LotteryToolBar gameEn={this.state.gameEn}/>
-                }*/}
+                }
             </View>
         );
     }
@@ -191,6 +191,7 @@ function mapStateToProps(store) {
     const JCZQHistoryListReducer = store.JCZQHistoryListReducer.toJS();
     return {
         isRefreshing: JCZQHistoryListReducer.isRefreshing,
+        isLoading: JCZQHistoryListReducer.isLoading,
         datePickerShow: JCZQHistoryListReducer.datePickerShow,
         lastest3DaysItems: JCZQHistoryListReducer.lastest3DaysItems,
         requestDate: JCZQHistoryListReducer.requestDate,
@@ -205,6 +206,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
     return {
         refreshAction: () => dispatch(JCZQListActions.refreshAction()),
+        loadingAction: () => dispatch(JCZQListActions.loadingAction()),
         clearData: () => dispatch(JCZQListActions.clearDataAction()),
         barDateClicked: () => dispatch(JCZQListActions.barDateClicked()),
         datePickerViewDissappear: () => dispatch(JCZQListActions.datePickerViewDissapper()),
