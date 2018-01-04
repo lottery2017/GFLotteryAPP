@@ -9,7 +9,7 @@ import {connect, Provider} from "react-redux";
 import {addNavigationHelpers} from "react-navigation";
 import {AppNavigator} from "./routers";
 import getStore from "./store";
-
+import codePush from 'react-native-code-push'
 const navReducer = (state, action) => {
     const newState = AppNavigator.router.getStateForAction(action, state);
     return newState || state;
@@ -21,6 +21,10 @@ const mapStateToProps = (state) => ({
 
 class App extends Component {
     componentWillMount() {
+        //热更新
+        codePush.sync();
+        //热更新的策略
+        codePush.InstallMode.ON_NEXT_RESTART;
         BackHandler.addEventListener('hardwareBackPress', this._onBackAndroid);
     }
 
@@ -31,7 +35,7 @@ class App extends Component {
                 return false
             }
             this.lastBackPressed = Date.now();
-            ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+            ToastAndroid.show('再按退出应用', ToastAndroid.SHORT);
             return true;
         }
     

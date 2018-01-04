@@ -77,6 +77,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -101,6 +102,8 @@ android {
         applicationId "com.gflottery"
         minSdkVersion 16
         targetSdkVersion 26
+        versionCode 1
+        versionName "1.0.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -114,9 +117,18 @@ android {
         }
     }
     buildTypes {
+        debug{
+            //省略了其他配置
+            buildConfigField "String", "CODEPUSH_KEY", '""'
+        }
+        releaseStaging {
+            buildConfigField "String", "CODEPUSH_KEY", '"btryi8LU1FlDJ-OIbOuLJ-CjE5xbe808146b-1669-4f64-8fd0-eb4b8c3338b4"'
+        }
+
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            buildConfigField "String", "CODEPUSH_KEY", '"bQ0-ja0naCHjQBVOih4RZ-WeeBGWe808146b-1669-4f64-8fd0-eb4b8c3338b4"'
         }
     }
     // applicationVariants are e.g. debug, release
@@ -138,6 +150,7 @@ dependencies {
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:26.1.0"
     compile "com.facebook.react:react-native:+"  // From node_modules
+    compile project(path: ':react-native-code-push')
 }
 
 // Run this once to be able to run the application with BUCK

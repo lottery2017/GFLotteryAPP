@@ -10,7 +10,6 @@
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-native": "^0.50.4",
-    "react-native-refreshflatlist": "^1.1.2",
     "react-native-swiper": "^1.5.13",
     "react-navigation": "^1.0.0-beta.22",
     "react-redux": "^5.0.6",
@@ -21,6 +20,7 @@
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
     "x2js": "^3.1.0",
-    "lodash": "latest"
+    "lodash": "latest",
+    "react-native-code-push": "latest"
   }
 }
