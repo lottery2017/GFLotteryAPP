@@ -13,23 +13,6 @@ export const loadingAction = createAction(types.TABHISTORYHALLPAGE_LOADING);
 
 async function getGameEnArray() {
     const gameEns = CommentConfig.gameEns;
-    /*
-     try {
-     const gameEns = await NativeModules.PTCRNBridge.fillDataToDict();
-     const dcspfIndex = gameEns.indexOf('football_dcspf');
-     if (dcspfIndex !== -1) {
-     gameEns[dcspfIndex] = 'dcspf';
-     }
-
-     const dcsfggIndex = gameEns.indexOf('football_dcsfgg');
-     if (dcsfggIndex !== -1) {
-     gameEns[dcsfggIndex] = 'dcsfgg';
-     }
-     return gameEns;
-     } catch (e) {
-     return [];
-     }
-     */
     return gameEns;
 }
 

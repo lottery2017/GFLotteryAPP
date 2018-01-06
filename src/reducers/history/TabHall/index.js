@@ -21,12 +21,12 @@ export default function tabHistoryHall(state = defaultUserState, action) {
             });
         case types.TABHISTORYHALLPAGE_GETAWARDHOME:
             return state.merge({
+                initLoading: false,
+                isRefreshing:false,
                 awardInfo: action.payload.awardInfo,
                 awardInfoNew: action.payload.awardInfoNew,
                 gameEnArray: action.payload.gameEnArray,
                 awardRankArray: action.payload.awardRankArray,
-                initLoading: false,
-                isRefreshing:false,
             });
         default:
             return state;

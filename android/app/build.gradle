@@ -108,6 +108,14 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
     }
+     signingConfigs {
+            release {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
     splits {
         abi {
             reset()
@@ -122,13 +130,14 @@ android {
             buildConfigField "String", "CODEPUSH_KEY", '""'
         }
         releaseStaging {
-            buildConfigField "String", "CODEPUSH_KEY", '"btryi8LU1FlDJ-OIbOuLJ-CjE5xbe808146b-1669-4f64-8fd0-eb4b8c3338b4"'
+            buildConfigField "String", "CODEPUSH_KEY", '"Vb_yrpy6zF_IoABUfVffrTBlXfMFe808146b-1669-4f64-8fd0-eb4b8c3338b4"'
         }
 
         release {
             minifyEnabled enableProguardInReleaseBuilds
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            buildConfigField "String", "CODEPUSH_KEY", '"bQ0-ja0naCHjQBVOih4RZ-WeeBGWe808146b-1669-4f64-8fd0-eb4b8c3338b4"'
+            buildConfigField "String", "CODEPUSH_KEY", '"sd3SKok6KuAb6ikHByrsnAbSoLS0e808146b-1669-4f64-8fd0-eb4b8c3338b4"'
         }
     }
     // applicationVariants are e.g. debug, release

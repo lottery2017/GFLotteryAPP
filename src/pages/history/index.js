@@ -66,15 +66,13 @@ class TabHistoryHall extends BaseComponent {
         }
     }
 
+
     componentDidMount() {
         this.props.loadingAction();
         this.props.getAwardHomeAction();
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!nextProps.initLoading) {
-
-        }
     }
 
     onRefresh() {
@@ -326,7 +324,7 @@ class TabHistoryHall extends BaseComponent {
     render() {
         return (
             <View style={{flex: 1}}>
-                {this.renderNotice()}
+                {this.props.initLoading ? null : this.renderNotice()}
                 {this.renderContent()}
             </View>
         );
